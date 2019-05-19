@@ -23,8 +23,11 @@ const theme = createMuiTheme({
 		},
 		openTitle: green['400'],
 		protectTitle: red['400'],
-		type: 'dark'
-	}
+		type: 'light'
+	},
+	typography: {
+		useNextVariants: true,
+	  }
 });
 
 class App extends Component {

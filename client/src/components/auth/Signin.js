@@ -1,40 +1,41 @@
 import React, { Component } from 'react';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardMedia from '@material-ui/core/CardMedia';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
+import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-import Icon from '@material-ui/core/Icon';
+
 import { withStyles } from '@material-ui/core/styles';
-import CardActions from '@material-ui/core/CardActions';
+
 import auth from './auth-helper';
 import { Redirect } from 'react-router-dom';
 import { signin } from '../../utils/api-auth.js';
+import { green } from '@material-ui/core/colors';
 
 const styles = theme => ({
-	card: {
-		maxWidth: 600,
-		margin: 'auto',
-		textAlign: 'center',
-		marginTop: theme.spacing.unit * 5,
-		paddingBottom: theme.spacing.unit * 2
+	base: {
+		flexGrow: 1,
+		overflow: "hidden",
+		textAlign: "center"
 	},
-	error: {
-		verticalAlign: 'middle'
+	item: {
+		margin: 25
 	},
-	title: {
-		marginTop: theme.spacing.unit * 2,
-		color: theme.palette.openTitle
+	input: {
+		outline: "none",
+		border: "none",
+		background: "rgb(238, 238, 238)",
+		padding: "12px 20px 12px 20px",
+		borderRadius: 500
 	},
-	textField: {
-		marginLeft: theme.spacing.unit,
-		marginRight: theme.spacing.unit,
-		width: 300
+	column: {
+		marginTop: 100
 	},
 	submit: {
-		margin: 'auto',
-		marginBottom: theme.spacing.unit * 2
+		outline: "none",
+		border: "none",
+		background: "#2196f3",
+		padding: "12px 20px 12px 20px",
+		borderRadius: 500,
+		color: "white",
+		margin: 25
 	}
 });
 
@@ -46,7 +47,9 @@ class Signin extends Component {
 		redirectToReferrer: false
 	};
 
-	clickSubmit = () => {
+	clickSubmit = (e) => {
+		e.preventDefault();
+
 		const user = {
 			email: this.state.email || undefined,
 			password: this.state.password || undefined
@@ -80,51 +83,41 @@ class Signin extends Component {
 		}
 
 		return (
-			<Card className={classes.card}>
-				<CardContent>
-					<Typography type="headline" component="h2" className={classes.title}>
-						Sign In
-					</Typography>
-					<TextField
-						id="email"
-						type="email"
-						label="Email"
-						className={classes.textField}
-						value={this.state.email}
-						onChange={this.handleChange('email')}
-						margin="normal"
-					/>
-					<br />
-					<TextField
-						id="password"
-						type="password"
-						label="Password"
-						className={classes.textField}
-						value={this.state.password}
-						onChange={this.handleChange('password')}
-						margin="normal"
-					/>
-					<br />{' '}
-					{this.state.error && (
-						<Typography component="p" color="error">
-							<Icon color="error" className={classes.error}>
-								error
-							</Icon>
-							{this.state.error}
-						</Typography>
-					)}
-				</CardContent>
-				<CardActions>
-					<Button
-						color="primary"
-						variant="raised"
-						onClick={this.clickSubmit}
-						className={classes.submit}
-					>
-						Submit
-					</Button>
-				</CardActions>
-			</Card>
+			<div className={classes.base}>
+				<Grid container spacing={24}>
+
+					<Grid item xs={4}>
+						<div className={classes.column}>
+							<Typography variant="h4" gutterBottom className={classes.item}>
+								Sign in
+							</Typography>
+
+							<form onSubmit={this.clickSubmit}>
+								<input type="text" 
+								placeholder="Email..." 
+								value={this.state.email} 
+								onChange={this.handleChange('email')} 
+								className={classes.item + " " + classes.input} />
+
+								<input type="text" 
+								placeholder="Password..." 
+								value={this.state.password} 
+								onChange={this.handleChange('password')} 
+								className={classes.item + " " + classes.input} />
+
+								<br/>
+								<button type="submit" className={classes.submit}>
+									Submit
+								</button>
+							</form>
+
+						</div>
+					</Grid>
+					<Grid item xs={8}>
+					</Grid>
+				</Grid>
+
+			</div>
 		);
 	}
 }
