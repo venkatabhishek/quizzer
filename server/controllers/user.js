@@ -1,5 +1,7 @@
 import User from '../models/user';
 import errorHandler from '../helpers/dbErrorHandler';
+import jwt from 'jsonwebtoken';
+import config from '../config';
 
 export const registerUser = (req, res, next) => {
 	const user = new User(req.body);
@@ -9,8 +11,21 @@ export const registerUser = (req, res, next) => {
 				error: errorHandler.getErrorMessage(err)
 			});
 		}
-		res.status(200).json({
-			message: 'New user registered successfully!'
+
+		const token = jwt.sign(
+			{
+				_id: user._id
+			},
+			config.jwtSecret
+		);
+
+		res.cookie('t', token, {
+			expire: new Date() + 9999
+		});
+
+		return res.json({
+			token,
+			user: { _id: result._id, name: result.name, email: result.email }
 		});
 	});
 };

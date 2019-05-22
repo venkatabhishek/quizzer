@@ -38,7 +38,7 @@ class Home extends Component {
       			</Typography>
 				  <div className={classes.linksContainer}>
 					<Typography variant="h5" gutterBottom className={classes.links}>
-					<Link className={classes.link} color="inherit">
+					<Link className={classes.link} color="inherit" href={"/signup"}>
 						Signup
 					</Link>
 					<Link className={classes.link} color="inherit" href={"/signin"}>

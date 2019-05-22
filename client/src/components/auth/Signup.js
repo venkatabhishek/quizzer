@@ -1,12 +1,13 @@
+
 import React, { Component } from 'react';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
-
+import Button from '@material-ui/core/Button';
 import { withStyles } from '@material-ui/core/styles';
-
-import auth from './auth-helper';
+import { Link } from 'react-router-dom';
+import { registerUser } from '../../utils/api-user.js';
 import { Redirect } from 'react-router-dom';
-import { signin } from '../../utils/api-auth.js';
+import auth from './auth-helper';
 
 const styles = theme => ({
 	base: {
@@ -34,28 +35,32 @@ const styles = theme => ({
 		padding: "12px 20px 12px 20px",
 		borderRadius: 500,
 		color: "white",
-		margin: 25,
-		cursor: "pointer"
+		margin: 25
 	}
 });
 
-class Signin extends Component {
+class Signup extends Component {
 	state = {
-		email: '',
+		name: '',
 		password: '',
-		error: '',
-		redirectToReferrer: false
+		email: '',
+		redirectToReferrer: false,
+		error: ''
+	};
+
+	handleChange = name => event => {
+		this.setState({ [name]: event.target.value });
 	};
 
 	clickSubmit = (e) => {
-		e.preventDefault();
+        e.preventDefault();
 
 		const user = {
+			name: this.state.name || undefined,
 			email: this.state.email || undefined,
 			password: this.state.password || undefined
 		};
-
-		signin(user).then(data => {
+		registerUser(user).then(data => {
 			if (data.error) {
 				this.setState({ error: data.error });
 			} else {
@@ -64,10 +69,6 @@ class Signin extends Component {
 				});
 			}
 		});
-	};
-
-	handleChange = name => event => {
-		this.setState({ [name]: event.target.value });
 	};
 
 	render() {
@@ -89,17 +90,23 @@ class Signin extends Component {
 					<Grid item xs={4}>
 						<div className={classes.column}>
 							<Typography variant="h4" gutterBottom className={classes.item}>
-								Sign in
+								Register
 							</Typography>
 
 							<form onSubmit={this.clickSubmit}>
+								<input type="text" 
+								placeholder="Name..." 
+								value={this.state.name} 
+								onChange={this.handleChange('name')} 
+								className={classes.item + " " + classes.input} />
+
 								<input type="email" 
 								placeholder="Email..." 
 								value={this.state.email} 
 								onChange={this.handleChange('email')} 
 								className={classes.item + " " + classes.input} />
 
-								<input type="password" 
+                                <input type="password" 
 								placeholder="Password..." 
 								value={this.state.password} 
 								onChange={this.handleChange('password')} 
@@ -125,9 +132,11 @@ class Signin extends Component {
 					</Grid>
 				</Grid>
 
+                
+
 			</div>
 		);
 	}
 }
 
-export default withStyles(styles)(Signin);
+export default withStyles(styles)(Signup);
