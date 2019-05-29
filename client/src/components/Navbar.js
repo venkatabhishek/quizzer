@@ -20,6 +20,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
+import { Link } from 'react-router-dom'
 
 import auth from '../components/auth/auth-helper';
 
@@ -104,6 +105,7 @@ const styles = theme => ({
   paper: {
     padding: theme.spacing.unit * 2,
     color: theme.palette.text.secondary,
+    margin: 25
   },
   choose: {
     float: "right"
@@ -149,6 +151,7 @@ class PrimarySearchAppBar extends React.Component {
   };
 
   navigate = (to) => (e) => {
+    this.handleClose();
     this.handleMenuClose();
     this.props.history.push(`/app/${to}`)
   }
@@ -258,7 +261,7 @@ class PrimarySearchAppBar extends React.Component {
           <DialogTitle id="form-dialog-title">New Activity</DialogTitle>
           <DialogContent>
             
-          <Grid container spacing={24}>
+          <Grid container spacing={0}>
 
             <Grid item xs={6} className={classes.option}>
               <Paper className={classes.paper+" "+classes.quiz} elevation={5}>
@@ -268,19 +271,25 @@ class PrimarySearchAppBar extends React.Component {
                 <Typography variant="h5" className={classes.description} gutterBottom >
                   A multiple choice, dynamic quiz, ideal for practicing the real thing
                 </Typography>
-                <Button variant="contained" color="secondary" className={classes.choose}>Choose</Button>
+                
+                <Button variant="contained" color="secondary" className={classes.choose} onClick={this.navigate("edit?type=q")}>Choose</Button>
+                
               </Paper>
               
             </Grid>
             <Grid item xs={6} className={classes.option}>
               <Paper className={classes.paper+" "+classes.flash} elevation={5}>
+                
                 <Typography variant="h4">
                   Flashcards
                 </Typography>
+                
                 <Typography variant="h5" gutterBottom className={classes.description}>
                   Two-sided key-definition cards, perfect for vocabulary, etc...
                 </Typography>
-                <Button variant="contained" color="secondary" className={classes.choose}>Choose</Button>
+                
+                <Button variant="contained" color="secondary" className={classes.choose} onClick={this.navigate("edit?type=f")}>Choose</Button>
+                
               </Paper>
             </Grid>
             

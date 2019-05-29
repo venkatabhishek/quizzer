@@ -99,13 +99,13 @@ class Signup extends Component {
 								value={this.state.name} 
 								onChange={this.handleChange('name')} 
 								className={classes.item + " " + classes.input} />
-
+								<br />
 								<input type="email" 
 								placeholder="Email..." 
 								value={this.state.email} 
 								onChange={this.handleChange('email')} 
 								className={classes.item + " " + classes.input} />
-
+								<br />
                                 <input type="password" 
 								placeholder="Password..." 
 								value={this.state.password} 

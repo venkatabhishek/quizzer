@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
 import blue from '@material-ui/core/colors/blue';
 import { BrowserRouter } from 'react-router-dom';
@@ -19,9 +19,9 @@ class App extends Component {
 	render() {
 		return (
 			<BrowserRouter>
-				<MuiThemeProvider theme={theme}>
+				<ThemeProvider theme={theme}>
 					<Routes />
-				</MuiThemeProvider>
+				</ThemeProvider>
 			</BrowserRouter>
 		);
 	}

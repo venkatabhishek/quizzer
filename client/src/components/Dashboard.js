@@ -9,6 +9,7 @@ import { Switch, Route } from 'react-router-dom';
   
 import Profile from './dashboard/Profile';
 import Base from './dashboard/Base';
+import Edit from './dashboard/Edit';
 
 var routes = [
 	{
@@ -20,6 +21,11 @@ var routes = [
 		path: "profile",
 		exact: false,
 		component: Profile
+	},
+	{
+		path: "edit",
+		exact: false,
+		component: Edit
 	}
 ]
 

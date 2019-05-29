@@ -98,7 +98,7 @@ class Signin extends Component {
 								value={this.state.email} 
 								onChange={this.handleChange('email')} 
 								className={classes.item + " " + classes.input} />
-
+								<br />
 								<input type="password" 
 								placeholder="Password..." 
 								value={this.state.password} 
