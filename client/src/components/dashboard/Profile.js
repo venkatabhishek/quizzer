@@ -98,8 +98,8 @@ class Profile extends Component {
                         </Paper>
                     </Grid>
                     <Grid item xs={8} >
-                        <Paper className={classes.paper}>
-                            
+                        <Paper className={classes.paper} elevation={4}>
+
                             <form autoComplete="off" className={classes.form}>
                             <Typography variant="h4" style={{textAlign: "left"}}>
                                 Profile
@@ -134,7 +134,7 @@ class Profile extends Component {
                                     {this.state.error}
                                 </Typography>
                             )}
-                            
+
                         </Paper>
                     </Grid>
                 </Grid>

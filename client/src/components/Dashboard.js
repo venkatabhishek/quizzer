@@ -6,7 +6,7 @@ import { Redirect } from 'react-router-dom';
 import Navbar from './Navbar';
 import { Switch, Route } from 'react-router-dom';
 
-  
+
 import Profile from './dashboard/Profile';
 import Base from './dashboard/Base';
 import Edit from './dashboard/Edit';
@@ -30,7 +30,7 @@ var routes = [
 ]
 
 const styles = theme => ({
-	
+
 });
 
 class Dashboard extends Component {
@@ -68,7 +68,7 @@ class Dashboard extends Component {
 		this.init();
 	}
 
-	
+
 	render() {
 		const { classes, match } = this.props;
 		const { user } = this.state
@@ -79,10 +79,10 @@ class Dashboard extends Component {
 
 
 		const routesComponent = routes.map(({ path, component: Component, exact}, key) => (
-			<Route exact path={`${match.url}/${path}`} 
+			<Route exact path={`${match.url}/${path}`}
 			render={(props) => <Component {...props} user={user}/>}
 			exact={exact}
-			key={key} 
+			key={key}
 			/>
 		));
 
@@ -92,7 +92,7 @@ class Dashboard extends Component {
 				<Navbar navigate={this.navigate}/>
 				<Switch>
 					{routesComponent}
-					
+
 				</Switch>
 			</div>
 		);
