@@ -3,6 +3,7 @@ import cookieParser from 'cookie-parser';
 import config from './server/config';
 import userRoutes from './server/routes/user';
 import authRoutes from './server/routes/auth';
+import activityRoutes from './server/routes/activity';
 
 // DB connection
 require('./server/config/dbConnection');
@@ -17,6 +18,7 @@ app.use(cookieParser());
 // routes
 app.use('/', userRoutes);
 app.use('/', authRoutes);
+app.use('/', activityRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

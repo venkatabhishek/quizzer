@@ -21,7 +21,7 @@ const userSchema = new Schema({
 	},
 	salt: {
 		type: String
-	}
+	},
 });
 
 userSchema

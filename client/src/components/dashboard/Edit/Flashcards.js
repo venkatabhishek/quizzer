@@ -17,8 +17,12 @@ import FormatUnderlinedIcon from '@material-ui/icons/FormatUnderlined';
 import FormatColorFillIcon from '@material-ui/icons/FormatColorFill';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Divider from '@material-ui/core/Divider';
+import TextField from '@material-ui/core/TextField';
+
 import { Editor, EditorState, convertToRaw, convertFromRaw, RichUtils } from 'draft-js';
 import 'draft-js/dist/Draft.css';
+
+import { createFlashcards } from '../../../utils/api-activity';
 
 const styles = theme => ({
     root: {
@@ -61,7 +65,16 @@ const styles = theme => ({
     },
     actionButton: {
         margin: 5
-    }
+    },
+    actionButtons: {
+        margin: "auto",
+        marginBottom: 20,
+        float: "right"
+    },
+    textField: {
+        marginTop: 0,
+        marginLeft: 20
+    },
 })
 
 class Flashcards extends Component {
@@ -76,7 +89,8 @@ class Flashcards extends Component {
                 back: EditorState.createEmpty()
             }],
             current: 0,
-            formats: []
+            formats: [],
+            title: ""
         }
 
         this.toggleStyle.bind(this);
@@ -120,6 +134,22 @@ class Flashcards extends Component {
         }
 
         this.setState({ cards })
+    }
+    
+    changeTitle = (e) => {
+        this.setState({
+            title: e.target.value
+        });
+    }
+
+    save = (e) => {
+
+        var { cards, title } = this.state;
+
+        var res = createFlashcards({
+            cards,
+            title
+        });
     }
 
     handleKeyCommand(command, editorState) {
@@ -209,9 +239,30 @@ class Flashcards extends Component {
         ))
 
         const main = cards[current];
-
+ 
         return (
             <div className={classes.root}>
+
+                <div className={classes.actionBar}>
+
+                        <TextField
+                            id="standard-with-placeholder"
+                            label="Title"
+                            placeholder="Untitled..."
+                            className={classes.textField}
+                            margin="normal"
+                            disableUnderline={true}
+                            value={this.state.title}
+                            onChange={this.changeTitle.bind(this)} 
+                        />
+
+                    <div className={classes.actionButtons}>
+                        <Button variant="contained" color="secondary" className={classes.actionButton}>Import</Button>
+                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save.bind(this)}>Save</Button>
+
+                    </div>
+                </div>
+
                 <Grid container spacing={8}>
                     <Grid item xs={4}>
                         <div className={classes.side}>
@@ -251,10 +302,6 @@ class Flashcards extends Component {
                             </Grid>
                             <Grid item xs={5}>
                                 <div style={{ display: "flex", flexDirection: "column" }}>
-                                    <div style={{ margin: "auto", marginBottom: 20 }}>
-                                        <Button variant="contained" color="secondary" className={classes.actionButton}>Import</Button>
-                                        <Button variant="contained" color="secondary" className={classes.actionButton}>Save</Button>
-                                    </div>
                                     <div className={classes.toggleContainer}>
                                         <ToggleButtonGroup value={this.state.formats} onChange={this.handleFormat.bind(this)}>
                                             <ToggleButton value="BOLD" onMouseDown={this.toggleStyle("BOLD")}>
