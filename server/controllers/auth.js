@@ -4,6 +4,7 @@ import expressJwt from 'express-jwt';
 import config from '../config';
 
 export const signin = (req, res) => {
+    console.log("SINGING IN")
 	User.findOne({ email: req.body.email }, (err, user) => {
 		if (err || !user) {
 			return res.status(401).json({

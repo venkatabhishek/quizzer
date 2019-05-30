@@ -3,25 +3,25 @@ import Activity from '../models/activity';
 
 export const createFlashcards = (req, res) => {
 
-    var flashcardParams = {
-        title: req.body.title,
-        author: req.profile.name,
-        category: req.body.category,
-        cards: req.body.cards
-    }
+    // TODO : USER ID is in req.auth._id. THUS, FIND USER FROM MONGO, then find name, then save according to name
 
-    const flashcards = new Flashcards(flashcardParams);
-    flashcards.save((err, result) => {
-        if (err) {
-			return res.status(400).json({
-				error: "Flashcards could not be created"
-			});
-		}
 
-        return res.json({
-            _id: result._id
-        })
-    })
+    // const flashcards = new Flashcards(flashcardParams);
+    // flashcards.save((err, result) => {
+    //     console.log("SAVED")
+    //     if (err) {
+    //         console.log("FAILURE")
+	// 		return res.status(400).json({
+	// 			error: "Flashcards could not be created"
+	// 		});
+	// 	}
+
+    //     console.log("SUCCESS")
+
+    //     return res.json({
+    //         _id: result._id
+    //     })
+    // })
 }
 
 export const createQuiz = (req, res) => {
@@ -39,5 +39,5 @@ export const findActivity = (req, res) => {
 
         return res.json(activity);
     })
-    
+
 }

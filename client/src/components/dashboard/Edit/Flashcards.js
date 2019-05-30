@@ -19,9 +19,10 @@ import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 
-import { Editor, EditorState, convertToRaw, convertFromRaw, RichUtils } from 'draft-js';
+import { Editor, EditorState, RichUtils } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
+import auth from '../../auth/auth-helper';
 import { createFlashcards } from '../../../utils/api-activity';
 
 const styles = theme => ({
@@ -90,7 +91,8 @@ class Flashcards extends Component {
             }],
             current: 0,
             formats: [],
-            title: ""
+            title: "",
+            category: ""
         }
 
         this.toggleStyle.bind(this);
@@ -135,21 +137,34 @@ class Flashcards extends Component {
 
         this.setState({ cards })
     }
-    
+
     changeTitle = (e) => {
         this.setState({
             title: e.target.value
         });
     }
 
+    changeCategory = (e) => {
+        this.setState({
+            category: e.target.value
+        })
+    }
+
     save = (e) => {
 
-        var { cards, title } = this.state;
+        var { cards, title, category } = this.state;
 
-        var res = createFlashcards({
+        const jwt = auth.isAuthenticated();
+
+        createFlashcards({
             cards,
-            title
-        });
+            title,
+            category
+        }, { t: jwt.token }).then(data => {
+            console.log(data)
+        })
+
+
     }
 
     handleKeyCommand(command, editorState) {
@@ -239,7 +254,7 @@ class Flashcards extends Component {
         ))
 
         const main = cards[current];
- 
+
         return (
             <div className={classes.root}>
 
@@ -251,9 +266,18 @@ class Flashcards extends Component {
                             placeholder="Untitled..."
                             className={classes.textField}
                             margin="normal"
-                            disableUnderline={true}
                             value={this.state.title}
-                            onChange={this.changeTitle.bind(this)} 
+                            onChange={this.changeTitle.bind(this)}
+                        />
+
+                        <TextField
+                            id="standard-with-placeholder"
+                            label="Category"
+                            placeholder="Misc..."
+                            className={classes.textField}
+                            margin="normal"
+                            value={this.state.category}
+                            onChange={this.changeCategory.bind(this)}
                         />
 
                     <div className={classes.actionButtons}>

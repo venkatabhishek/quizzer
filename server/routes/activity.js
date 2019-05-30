@@ -11,10 +11,12 @@ import { findUserById } from '../controllers/user'
 
 const router = express.Router();
 
-router.route("/activity/flashcard/create").post(createFlashcards);
-
-router.route("/activity/:id").get(requireSignin, findActivity);
-
 router.param('id', findUserById);
+
+router.route('/activity/flashcard/create').post(requireSignin, createFlashcards);
+
+router.route('/activity/:id').get(requireSignin, findActivity);
+
+
 
 export default router;
