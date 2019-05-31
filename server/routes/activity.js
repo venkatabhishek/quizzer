@@ -2,6 +2,7 @@ import express from 'express';
 
 import {
     createFlashcards,
+    updateFlashcards,
     findActivity
 } from '../controllers/activity'
 
@@ -11,9 +12,11 @@ import { findUserById } from '../controllers/user'
 
 const router = express.Router();
 
-router.param('id', findUserById);
+
 
 router.route('/activity/flashcard/create').post(requireSignin, createFlashcards);
+
+router.route('/activity/flashcard/update').post(requireSignin, updateFlashcards);
 
 router.route('/activity/:id').get(requireSignin, findActivity);
 

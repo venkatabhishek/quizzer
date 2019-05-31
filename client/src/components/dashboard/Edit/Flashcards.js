@@ -18,12 +18,16 @@ import FormatColorFillIcon from '@material-ui/icons/FormatColorFill';
 import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
 import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
+import Fab from '@material-ui/core/Fab';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-import { Editor, EditorState, RichUtils } from 'draft-js';
+import { Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 
 import auth from '../../auth/auth-helper';
-import { createFlashcards } from '../../../utils/api-activity';
+import { createFlashcards, findActivity, updateFlashcards } from '../../../utils/api-activity';
+
+import { withRouter, Redirect } from "react-router";
 
 const styles = theme => ({
     root: {
@@ -37,7 +41,7 @@ const styles = theme => ({
     },
     sidecard: {
         border: "1px solid black",
-        marginBottom: 40,
+        marginBottom: 60,
         cursor: "pointer",
         width: 200,
         height: 100,
@@ -76,6 +80,12 @@ const styles = theme => ({
         marginTop: 0,
         marginLeft: 20
     },
+    button: {
+        marginTop: 30
+    },
+    fab: {
+        marginLeft: 200
+    }
 })
 
 class Flashcards extends Component {
@@ -92,11 +102,57 @@ class Flashcards extends Component {
             current: 0,
             formats: [],
             title: "",
-            category: ""
+            category: "",
+            exists: false,
+            id: null
         }
 
         this.toggleStyle.bind(this);
 
+
+    }
+
+    componentWillMount = () => {
+        const values = queryString.parse(this.props.location.search);
+
+        const jwt = auth.isAuthenticated();
+
+        if (!values.q) {
+            this.setState({
+                exists: false
+            })
+        } else {
+
+            findActivity(values.q, {
+                t: jwt.token
+            }).then((data) => {
+
+                data.cards.map((card) => {
+
+                    var frontCState = convertFromRaw(JSON.parse(card.front));
+                    var backCState = convertFromRaw(JSON.parse(card.back));
+
+                    card.front = EditorState.createWithContent(frontCState);
+                    card.back = EditorState.createWithContent(backCState);
+
+                    return card
+                })
+
+                this.setState({
+                    title: data.title,
+                    category: data.category,
+                    cards: data.cards,
+                    exists: true,
+                    num: data.cards.length,
+                    id: values.q
+                })
+
+
+            }).catch(err => {
+                console.log("Activity not found")
+            })
+
+        }
     }
 
     handleFormat = (event, newFormats) => {
@@ -104,6 +160,17 @@ class Flashcards extends Component {
             formats: newFormats
         })
     };
+
+    deleteCard = (index) => (e) => {
+        var { cards, num } = this.state
+
+        if(num != 1){
+                cards.splice(index, 1);
+                this.setState({ cards, num: num-1, current: num-2 })
+        }else{
+            console.log("There must be at least one card")
+        }
+    }
 
     addCard = () => {
         var cards = this.state.cards;
@@ -152,17 +219,75 @@ class Flashcards extends Component {
 
     save = (e) => {
 
-        var { cards, title, category } = this.state;
+
+        var { cards, title, category, exists, id } = this.state;
 
         const jwt = auth.isAuthenticated();
 
-        createFlashcards({
-            cards,
-            title,
-            category
-        }, { t: jwt.token }).then(data => {
-            console.log(data)
-        })
+        if (exists) {
+            updateFlashcards({
+                id,
+                cards,
+                category,
+                title
+            }, { t: jwt.token }).then((data) => {
+                console.log("UPDATE SUCCESSFUL")
+            }).catch(err => {
+                console.log("UPDATE FAILED")
+            })
+
+
+        } else {
+            createFlashcards({
+                cards,
+                title,
+                category
+            }, { t: jwt.token }).then(res => {
+
+
+
+                const jwt = auth.isAuthenticated();
+
+
+
+                findActivity(res._id, {
+                    t: jwt.token
+                }).then((data) => {
+
+                    data.cards.map((card) => {
+
+                        var frontCState = convertFromRaw(JSON.parse(card.front));
+                        var backCState = convertFromRaw(JSON.parse(card.back));
+
+                        card.front = EditorState.createWithContent(frontCState);
+                        card.back = EditorState.createWithContent(backCState);
+
+                        return card
+                    })
+
+                    this.setState({
+                        title: data.title,
+                        category: data.category,
+                        cards: data.cards,
+                        exists: true,
+                        num: data.cards.length,
+                        id: res._id
+                    })
+
+                    console.log("SAVE SUCCESSFUL")
+
+
+                }).catch(err => {
+                    console.log("Activity not found")
+                })
+
+
+
+            }).catch(err => {
+                console.log("SAVE FAILED")
+            })
+        }
+
 
 
     }
@@ -227,14 +352,17 @@ class Flashcards extends Component {
 
     render() {
         const { classes } = this.props;
-        const { cards, current } = this.state;
+        const { cards, current, exists, id } = this.state;
 
+
+        // ADD SNACKBAR ALERTS AND WARNING FOR CONTENT BEING SAVED BEFORE EXIT
 
         const sides = cards.map((card, index) => (
             <div
                 className={classes.sidecard + " " + (index == current ? classes.current : null)}
                 onClick={this.setCurrent(index)}
                 key={index}>
+
                 <div className={classes.sidecardhalf}>
                     {index != current ? (
                         <div>
@@ -242,7 +370,9 @@ class Flashcards extends Component {
                         </div>
                     ) : null}
                 </div>
+
                 <hr />
+
                 <div className={classes.sidecardhalf}>
                     {index != current ? (
                         <div>
@@ -250,6 +380,10 @@ class Flashcards extends Component {
                         </div>
                     ) : null}
                 </div>
+
+                <Fab color="secondary" aria-label="Delete" className={classes.fab} onClick={this.deleteCard(index).bind(this)}>
+                    <DeleteIcon />
+                </Fab>
             </div>
         ))
 
@@ -260,25 +394,25 @@ class Flashcards extends Component {
 
                 <div className={classes.actionBar}>
 
-                        <TextField
-                            id="standard-with-placeholder"
-                            label="Title"
-                            placeholder="Untitled..."
-                            className={classes.textField}
-                            margin="normal"
-                            value={this.state.title}
-                            onChange={this.changeTitle.bind(this)}
-                        />
+                    <TextField
+                        id="standard-with-placeholder"
+                        label="Title"
+                        placeholder="Untitled..."
+                        className={classes.textField}
+                        margin="normal"
+                        value={this.state.title}
+                        onChange={this.changeTitle.bind(this)}
+                    />
 
-                        <TextField
-                            id="standard-with-placeholder"
-                            label="Category"
-                            placeholder="Misc..."
-                            className={classes.textField}
-                            margin="normal"
-                            value={this.state.category}
-                            onChange={this.changeCategory.bind(this)}
-                        />
+                    <TextField
+                        id="standard-with-placeholder"
+                        label="Category"
+                        placeholder="Misc..."
+                        className={classes.textField}
+                        margin="normal"
+                        value={this.state.category}
+                        onChange={this.changeCategory.bind(this)}
+                    />
 
                     <div className={classes.actionButtons}>
                         <Button variant="contained" color="secondary" className={classes.actionButton}>Import</Button>
@@ -304,7 +438,7 @@ class Flashcards extends Component {
                                         <Typography variant="h5" component="h3">
                                             <Editor
                                                 editorState={cards[current].front}
-                                                onChange={this.onChange(current, 0)}
+                                                onChange={this.onChange(current, 0).bind(this)}
                                                 handleKeyCommand={this.handleKeyCommand.bind(this)}
                                                 onBlur={this.onBlur.bind(this)}
                                                 placeholder="Front text..." />
@@ -315,7 +449,7 @@ class Flashcards extends Component {
                                         <Typography variant="h5" component="h3">
                                             <Editor
                                                 editorState={cards[current].back}
-                                                onChange={this.onChange(current, 1)}
+                                                onChange={this.onChange(current, 1).bind(this)}
                                                 handleKeyCommand={this.handleKeyCommand.bind(this)}
                                                 onBlur={this.onBlur.bind(this)}
                                                 placeholder="Back text..." />
@@ -351,4 +485,4 @@ class Flashcards extends Component {
     }
 }
 
-export default withStyles(styles)(Flashcards);
+export default withRouter(withStyles(styles)(Flashcards));

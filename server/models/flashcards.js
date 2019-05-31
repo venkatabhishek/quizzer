@@ -5,8 +5,8 @@ const Schema = mongoose.Schema;
 
 const FlashcardsSchema = new Schema({
     cards: [{
-        front: String,
-        back: String
+        front: Schema.Types.Mixed,
+        back: Schema.Types.Mixed
     }]
 })
 
