@@ -90,3 +90,34 @@ export const findActivity = (id, credentials) => {
 		})
 		.catch(err => console.log(err));
 }
+
+export const deleteActivity = (id, credentials) => {
+    return fetch('/activity/' + id, {
+        method: 'DELETE',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+    })
+        .then(response => {
+			return response.json();
+		})
+		.catch(err => console.log(err));
+}
+
+
+export const getActivities = (credentials) => {
+    return fetch('/activity/user', {
+        method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+    })
+        .then(response => {
+			return response.json();
+		})
+		.catch(err => console.log(err));
+}

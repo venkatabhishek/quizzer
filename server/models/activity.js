@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 
 const activitySchema = new Schema({
     title: String,
-    author: String,
+    author: { type: Schema.Types.ObjectId, ref: 'Person' },
     createDate: {
         type: Date,
         default: Date.now

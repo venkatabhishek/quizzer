@@ -6,17 +6,10 @@ export const createFlashcards = (req, res) => {
 
     // TODO : USER ID is in req.auth._id. THUS, FIND USER FROM MONGO, then find name, then save according to name
 
-    User.findById(req.auth._id).exec((err, user) => {
-		if (err || !user) {
-			return res.status(400).json({
-				error: 'No user found with that credentials!'
-			});
-		}
-
         var flashcardParams = {
             title: req.body.title,
             category: req.body.category,
-            author: user.email,
+            author: req.auth._id,
             cards: req.body.cards
         }
 
@@ -35,18 +28,12 @@ export const createFlashcards = (req, res) => {
             })
         })
 
-	});
+
 
 
 }
 
 export const updateFlashcards = (req, res) => {
-    User.findById(req.auth._id).exec((err, user) => {
-		if (err || !user) {
-			return res.status(400).json({
-				error: 'No user found with that credentials!'
-			});
-		}
 
         Activity.findById(req.body.id).exec((err, activity) => {
 
@@ -56,7 +43,7 @@ export const updateFlashcards = (req, res) => {
                 })
             }
 
-            if(activity.author != user.email){
+            if(activity.author != req.auth._id){
                 return res.status(400).json({
                     error: 'This activity does not belong to you!'
                 });
@@ -81,9 +68,6 @@ export const updateFlashcards = (req, res) => {
 
         })
 
-
-
-	});
 }
 
 export const createQuiz = (req, res) => {
@@ -100,6 +84,43 @@ export const findActivity = (req, res) => {
         }
 
         return res.json(activity);
+    })
+
+}
+
+export const getActivities = (req, res) => {
+    Activity.find({author: req.auth._id}).exec(function (err, activities) {
+
+        return res.json(activities)
+  });
+}
+
+export const deleteActivity = (req, res) => {
+    var id = req.params.id;
+    Activity.findById(id, (err, activity) => {
+        if(err || !activity){
+            return res.status(400).json({
+				error: 'No activity found!'
+			});
+        }
+
+        if(activity.author != req.auth._id){
+            return res.status(400).json({
+				error: 'You are not authorized to do that!'
+			});
+        }
+
+        Activity.deleteOne({_id: activity._id}, (err) => {
+            if(err){
+                return res.status(400).json({
+				error: 'Delete failed!'
+			    });
+            }
+
+            return res.json({
+                message: "Delete success"
+            })
+        })
     })
 
 }

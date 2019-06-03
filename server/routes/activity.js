@@ -3,7 +3,9 @@ import express from 'express';
 import {
     createFlashcards,
     updateFlashcards,
-    findActivity
+    findActivity,
+    getActivities,
+    deleteActivity
 } from '../controllers/activity'
 
 import { requireSignin } from '../controllers/auth'
@@ -18,8 +20,9 @@ router.route('/activity/flashcard/create').post(requireSignin, createFlashcards)
 
 router.route('/activity/flashcard/update').post(requireSignin, updateFlashcards);
 
-router.route('/activity/:id').get(requireSignin, findActivity);
+router.route('/activity/user').get(requireSignin, getActivities);
 
+router.route('/activity/:id').get(requireSignin, findActivity).delete(requireSignin, deleteActivity);
 
 
 export default router;

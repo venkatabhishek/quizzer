@@ -22,6 +22,7 @@ const userSchema = new Schema({
 	salt: {
 		type: String
 	},
+    activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }]
 });
 
 userSchema

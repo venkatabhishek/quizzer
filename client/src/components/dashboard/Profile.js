@@ -3,6 +3,24 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
+import FolderIcon from '@material-ui/icons/Folder';
+import DeleteIcon from '@material-ui/icons/Delete';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemIcon from '@material-ui/core/ListItemIcon';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Avatar from '@material-ui/core/Avatar';
+import IconButton from '@material-ui/core/IconButton';
+import ButtonBase from '@material-ui/core/ButtonBase';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
+import Button from '@material-ui/core/Button';
+import auth from '../auth/auth-helper';
+import { getActivities, deleteActivity } from '../../utils/api-activity';
+
+import { withRouter } from "react-router";
 
 const styles = theme => ({
     paper: {
@@ -10,12 +28,12 @@ const styles = theme => ({
         textAlign: 'center',
         color: theme.palette.text.secondary,
         whiteSpace: 'nowrap',
-        margin: theme.spacing.unit * 5,
+        margin: theme.spacing(5),
     },
     container: {
         display: 'grid',
         gridTemplateColumns: 'repeat(12, 1fr)',
-        gridGap: `${theme.spacing.unit * 3}px`,
+        gridGap: theme.spacing(3),
         margin: 0,
         width: "100%"
     },
@@ -50,7 +68,10 @@ const styles = theme => ({
 		borderRadius: 500,
 		color: "white",
 		margin: 25
-	}
+	},
+    primary: {
+        fontSize: 24
+    }
 });
 
 
@@ -64,27 +85,92 @@ class Profile extends Component {
             name: '',
             password: '',
             email: '',
-            error: ''
+            error: '',
+            cards: [],
+            open: false,
+            message: ""
         };
 
-        console.log(props.user)
+
     }
+
+    componentWillMount = () => {
+		const jwt = auth.isAuthenticated();
+		getActivities({t: jwt.token}).then((data) => {
+            this.setState({
+                cards: data
+            })
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+
 
     handleChange = name => event => {
         this.setState({ [name]: event.target.value });
     };
 
+    delete = (id) => (e) => {
+        const jwt = auth.isAuthenticated();
+        deleteActivity(id, {t: jwt.token}).then(() => {
+            var cards = this.state.cards;
+
+            cards = cards.filter(function( obj ) {
+                return obj._id !== id;
+            });
+
+            this.setState({ cards, open: true, message: "Deleted Successfully" })
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+
+    goTo = (id) => (e) => {
+        this.props.history.push('/app/edit?type=f&q='+id);
+    }
 
 
     render() {
 
         const { classes, user } = this.props;
 
+
         if (user.name) {
             user.name = user.name.replace(/\s/g, '');
         }
 
-        console.log(this.state.name)
+
+
+        const activities = this.state.cards.map((item, index) => {
+            return (
+                <div className={classes.demo} key={index}>
+
+                <ListItem button onClick={this.goTo(item._id)}>
+
+                  <ListItemAvatar>
+                    <Avatar>
+                      <FolderIcon />
+                    </Avatar>
+                  </ListItemAvatar>
+
+                  <ListItemText
+                  classes={{
+                        primary: classes.primary
+                    }}
+                    primary={item.title}
+                    secondary={item.category + " | " + item.cards.length + " terms"}
+                  />
+                  <ListItemSecondaryAction>
+                    <IconButton edge="end" aria-label="Delete" onClick={this.delete(item._id)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </ListItemSecondaryAction>
+
+                </ListItem>
+          </div>
+        )
+        })
 
         return (
             <div >
@@ -136,11 +222,46 @@ class Profile extends Component {
                             )}
 
                         </Paper>
+
+                        <Paper className={classes.paper} elevation={4}>
+                            <Typography variant="h4" style={{textAlign: "left"}}>
+                                Your Activities
+                            </Typography>
+                            <List dense={true}>
+                            {activities}
+                            </List>
+                        </Paper>
+
+
                     </Grid>
                 </Grid>
+                <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                    }}
+                    open={this.state.open}
+                    autoHideDuration={6000}
+                    onClose={() => {this.setState({open: false})}}
+                    ContentProps={{
+                    'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.state.message}</span>}
+                    action={[
+                    <IconButton
+                        key="close"
+                        aria-label="Close"
+                        color="inherit"
+                        className={classes.close}
+                        onClick={() => {this.setState({open: false})}}
+                    >
+                        <CloseIcon />
+                    </IconButton>,
+                    ]}
+                />
             </div>
         );
     }
 }
 
-export default withStyles(styles)(Profile);
+export default withRouter(withStyles(styles)(Profile));
