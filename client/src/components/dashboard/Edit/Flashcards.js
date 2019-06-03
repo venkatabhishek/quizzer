@@ -20,6 +20,9 @@ import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import Fab from '@material-ui/core/Fab';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { Editor, EditorState, RichUtils, convertFromRaw } from 'draft-js';
 import 'draft-js/dist/Draft.css';
@@ -41,7 +44,6 @@ const styles = theme => ({
     },
     sidecard: {
         border: "1px solid black",
-        marginBottom: 60,
         cursor: "pointer",
         width: 200,
         height: 100,
@@ -84,7 +86,8 @@ const styles = theme => ({
         marginTop: 30
     },
     fab: {
-        marginLeft: 200
+        marginLeft: 200,
+        marginTop: -25
     }
 })
 
@@ -104,10 +107,13 @@ class Flashcards extends Component {
             title: "",
             category: "",
             exists: false,
-            id: null
+            id: null,
+            open: false,
+            message: ""
         }
 
         this.toggleStyle.bind(this);
+        this.deleteCard.bind(this);
 
 
     }
@@ -149,7 +155,7 @@ class Flashcards extends Component {
 
 
             }).catch(err => {
-                console.log("Activity not found")
+                this.props.history.push('/app')
             })
 
         }
@@ -164,12 +170,27 @@ class Flashcards extends Component {
     deleteCard = (index) => (e) => {
         var { cards, num } = this.state
 
-        if(num != 1){
-                cards.splice(index, 1);
-                this.setState({ cards, num: num-1, current: num-2 })
-        }else{
-            console.log("There must be at least one card")
-        }
+        this.setState({
+            current: 0
+        }, () => {
+
+            if(num != 1){
+
+                    cards.splice(index, 1);
+                    this.setState({
+                        cards,
+                        num: num-1,
+                    })
+
+            }else{
+                this.setState({
+                            message: "There must be at least one card!",
+                            open: true
+                        })
+            }
+        })
+
+
     }
 
     addCard = () => {
@@ -183,7 +204,6 @@ class Flashcards extends Component {
         this.setState({
             cards,
             num: this.state.num + 1,
-            current: cards.length - 1
         });
     }
 
@@ -231,9 +251,15 @@ class Flashcards extends Component {
                 category,
                 title
             }, { t: jwt.token }).then((data) => {
-                console.log("UPDATE SUCCESSFUL")
+                this.setState({
+                        message: "Updated successfully!",
+                        open: true
+                    })
             }).catch(err => {
-                console.log("UPDATE FAILED")
+                this.setState({
+                        message: "Update failed!",
+                        open: true
+                    })
             })
 
 
@@ -274,17 +300,23 @@ class Flashcards extends Component {
                         id: res._id
                     })
 
-                    console.log("SAVE SUCCESSFUL")
+                    this.setState({
+                        message: "Saved successfully!",
+                        open: true
+                    })
 
 
                 }).catch(err => {
-                    console.log("Activity not found")
+                    this.props.history.push('/app')
                 })
 
 
 
             }).catch(err => {
-                console.log("SAVE FAILED")
+                this.setState({
+                        message: "Saved failed!",
+                        open: true
+                    })
             })
         }
 
@@ -350,14 +382,24 @@ class Flashcards extends Component {
         })
     }
 
+    handleClose = (event, reason) => {
+        this.setState({
+            open: false
+        })
+    }
+
+    handleOpen = (e) => {
+        this.setState({
+            open: true
+        })
+    }
+
     render() {
         const { classes } = this.props;
         const { cards, current, exists, id } = this.state;
 
-
-        // ADD SNACKBAR ALERTS AND WARNING FOR CONTENT BEING SAVED BEFORE EXIT
-
         const sides = cards.map((card, index) => (
+            <div style={{marginBottom: 60}}>
             <div
                 className={classes.sidecard + " " + (index == current ? classes.current : null)}
                 onClick={this.setCurrent(index)}
@@ -381,9 +423,12 @@ class Flashcards extends Component {
                     ) : null}
                 </div>
 
-                <Fab color="secondary" aria-label="Delete" className={classes.fab} onClick={this.deleteCard(index).bind(this)}>
+
+            </div>
+
+            <Fab color="secondary" aria-label="Delete" className={classes.fab} onClick={this.deleteCard(index)}>
                     <DeleteIcon />
-                </Fab>
+            </Fab>
             </div>
         ))
 
@@ -415,7 +460,7 @@ class Flashcards extends Component {
                     />
 
                     <div className={classes.actionButtons}>
-                        <Button variant="contained" color="secondary" className={classes.actionButton}>Import</Button>
+                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.handleOpen}>Import</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save.bind(this)}>Save</Button>
 
                     </div>
@@ -480,6 +525,31 @@ class Flashcards extends Component {
                         </Grid>
                     </Grid>
                 </Grid>
+
+                <Snackbar
+                    anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                    }}
+                    open={this.state.open}
+                    autoHideDuration={6000}
+                    onClose={this.handleClose}
+                    ContentProps={{
+                    'aria-describedby': 'message-id',
+                    }}
+                    message={<span id="message-id">{this.state.message}</span>}
+                    action={[
+                    <IconButton
+                        key="close"
+                        aria-label="Close"
+                        color="inherit"
+                        className={classes.close}
+                        onClick={this.handleClose}
+                    >
+                        <CloseIcon />
+                    </IconButton>,
+                    ]}
+                />
             </div>
         )
     }
