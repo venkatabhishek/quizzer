@@ -52,7 +52,9 @@ const styles = theme => ({
     sidecardhalf: {
         height: 50,
         width: 200,
-        float: "left"
+        float: "left",
+        overflow: "hidden",
+        textOverflow: "ellipsis",
     },
     sidetext: {
         padding: 20
@@ -129,9 +131,7 @@ class Flashcards extends Component {
             })
         } else {
 
-            findActivity(values.q, {
-                t: jwt.token
-            }).then((data) => {
+            findActivity(values.q).then((data) => {
 
                 data.cards.map((card) => {
 
@@ -143,6 +143,7 @@ class Flashcards extends Component {
 
                     return card
                 })
+
 
                 this.setState({
                     title: data.title,
@@ -159,6 +160,10 @@ class Flashcards extends Component {
             })
 
         }
+    }
+
+    play = () => {
+        this.props.history.push('/app/play?type=f&q='+this.state.id)
     }
 
     handleFormat = (event, newFormats) => {
@@ -251,12 +256,21 @@ class Flashcards extends Component {
                 category,
                 title
             }, { t: jwt.token }).then((data) => {
-                this.setState({
+                console.log(data)
+                if(data.error){
+                    this.setState({
+                        message: data.error,
+                        open: true
+                    })
+                }else{
+                    this.setState({
                         message: "Updated successfully!",
                         open: true
                     })
+                }
+
             }).catch(err => {
-                this.setState({
+                 this.setState({
                         message: "Update failed!",
                         open: true
                     })
@@ -276,9 +290,7 @@ class Flashcards extends Component {
 
 
 
-                findActivity(res._id, {
-                    t: jwt.token
-                }).then((data) => {
+                findActivity(res._id).then((data) => {
 
                     data.cards.map((card) => {
 
@@ -399,7 +411,7 @@ class Flashcards extends Component {
         const { cards, current, exists, id } = this.state;
 
         const sides = cards.map((card, index) => (
-            <div style={{marginBottom: 60}}>
+            <div style={{marginBottom: 60}} key={index}>
             <div
                 className={classes.sidecard + " " + (index == current ? classes.current : null)}
                 onClick={this.setCurrent(index)}
@@ -408,7 +420,7 @@ class Flashcards extends Component {
                 <div className={classes.sidecardhalf}>
                     {index != current ? (
                         <div>
-                            <Editor editorState={card.front} />
+                            <Editor editorState={card.front} readOnly={true} />
                         </div>
                     ) : null}
                 </div>
@@ -418,7 +430,7 @@ class Flashcards extends Component {
                 <div className={classes.sidecardhalf}>
                     {index != current ? (
                         <div>
-                            <Editor editorState={card.back} />
+                            <Editor editorState={card.back} readOnly={true} />
                         </div>
                     ) : null}
                 </div>
@@ -462,7 +474,7 @@ class Flashcards extends Component {
                     <div className={classes.actionButtons}>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.handleOpen}>Import</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save.bind(this)}>Save</Button>
-
+                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.play}>Play</Button>
                     </div>
                 </div>
 
@@ -482,7 +494,7 @@ class Flashcards extends Component {
                                     <Paper className={classes.card}>
                                         <Typography variant="h5" component="h3">
                                             <Editor
-                                                editorState={cards[current].front}
+                                                editorState={this.state.cards[current].front}
                                                 onChange={this.onChange(current, 0).bind(this)}
                                                 handleKeyCommand={this.handleKeyCommand.bind(this)}
                                                 onBlur={this.onBlur.bind(this)}
@@ -493,7 +505,7 @@ class Flashcards extends Component {
                                     <Paper className={classes.card}>
                                         <Typography variant="h5" component="h3">
                                             <Editor
-                                                editorState={cards[current].back}
+                                                editorState={this.state.cards[current].back}
                                                 onChange={this.onChange(current, 1).bind(this)}
                                                 handleKeyCommand={this.handleKeyCommand.bind(this)}
                                                 onBlur={this.onBlur.bind(this)}

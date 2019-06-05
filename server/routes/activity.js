@@ -5,7 +5,8 @@ import {
     updateFlashcards,
     findActivity,
     getActivities,
-    deleteActivity
+    deleteActivity,
+    getAllActivities
 } from '../controllers/activity'
 
 import { requireSignin } from '../controllers/auth'
@@ -22,7 +23,11 @@ router.route('/activity/flashcard/update').post(requireSignin, updateFlashcards)
 
 router.route('/activity/user').get(requireSignin, getActivities);
 
-router.route('/activity/:id').get(requireSignin, findActivity).delete(requireSignin, deleteActivity);
+router.route('/activity/all').get(getAllActivities);
+
+router.route('/activity/:id').get(findActivity).delete(requireSignin, deleteActivity);
+
+
 
 
 export default router;

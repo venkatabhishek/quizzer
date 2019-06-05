@@ -10,6 +10,7 @@ import { Switch, Route } from 'react-router-dom';
 import Profile from './dashboard/Profile';
 import Base from './dashboard/Base';
 import Edit from './dashboard/Edit';
+import Play from './dashboard/Play'
 
 var routes = [
 	{
@@ -26,7 +27,12 @@ var routes = [
 		path: "edit",
 		exact: false,
 		component: Edit
-	}
+	},
+    {
+        path: "play",
+        exact: false,
+        component: Play
+    }
 ]
 
 const styles = theme => ({

@@ -127,7 +127,7 @@ class Profile extends Component {
     }
 
     goTo = (id) => (e) => {
-        this.props.history.push('/app/edit?type=f&q='+id);
+        this.props.history.push('/app/play?type=f&q='+id);
     }
 
 

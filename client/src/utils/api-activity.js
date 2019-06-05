@@ -41,24 +41,32 @@ export const updateFlashcards = (flashcards, credentials) => {
 
     // map editorStates to stringified json
 
+    var flashVars = {}
+
     if(!flashcards.category){
-        flashcards.category = 'Misc.'
+        flashVars.category = 'Misc.'
+    }else{
+        flashVars.category = flashcards.category;
     }
 
     if(!flashcards.title){
-        flashcards.title = 'Untitled'
+        flashVars.title = 'Untitled'
+    }else{
+        flashVars.title = flashcards.title;
     }
 
-    flashcards.cards.map((card) => {
+    flashVars.cards = flashcards.cards.map((card) => {
 
         var front = (card.front).getCurrentContent();
         var back = (card.back).getCurrentContent();
 
-        card.front = JSON.stringify(convertToRaw(front));
-        card.back = JSON.stringify(convertToRaw(back));
-
-        return card;
+        return {
+            front: JSON.stringify(convertToRaw(front)),
+            back: JSON.stringify(convertToRaw(back))
+        };
     })
+
+    flashVars.id = flashcards.id;
 
     return fetch('/activity/flashcard/update', {
         method: 'POST',
@@ -67,22 +75,21 @@ export const updateFlashcards = (flashcards, credentials) => {
 			'Content-Type': 'application/json',
             Authorization: 'Bearer ' + credentials.t
 		},
-		body: JSON.stringify(flashcards)
+		body: JSON.stringify(flashVars)
     }).then(response => {
 			return response.json();
 		})
-		.catch(err => console.log(err));
+		.catch(err => {console.log(err)});
 
 
 }
 
-export const findActivity = (id, credentials) => {
+export const findActivity = (id) => {
     return fetch('/activity/' + id, {
         method: 'GET',
 		headers: {
 			Accept: 'application/json',
 			'Content-Type': 'application/json',
-            Authorization: 'Bearer ' + credentials.t
 		},
     })
         .then(response => {
@@ -111,9 +118,23 @@ export const getActivities = (credentials) => {
     return fetch('/activity/user', {
         method: 'GET',
 		headers: {
-			Accept: 'application/json',
+			Accept: 'applierrcation/json',
 			'Content-Type': 'application/json',
             Authorization: 'Bearer ' + credentials.t
+		},
+    })
+        .then(response => {
+			return response.json();
+		})
+		.catch(err => console.log(err));
+}
+
+export const getAllActivities = () => {
+    return fetch('/activity/all', {
+        method: 'GET',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
 		},
     })
         .then(response => {

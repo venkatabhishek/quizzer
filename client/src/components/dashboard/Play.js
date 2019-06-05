@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import queryString from 'query-string';
 
-
+import Flashcards from './Play/Flashcards';
+import Quiz from './Play/Quiz'
 
 class Play extends Component {
 
@@ -24,4 +25,4 @@ class Play extends Component {
 
 }
 
-export default Edit;
+export default Play;
