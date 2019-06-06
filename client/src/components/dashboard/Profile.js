@@ -86,7 +86,7 @@ class Profile extends Component {
             password: '',
             email: '',
             error: '',
-            cards: [],
+            activities: [],
             open: false,
             message: ""
         };
@@ -98,7 +98,7 @@ class Profile extends Component {
 		const jwt = auth.isAuthenticated();
 		getActivities({t: jwt.token}).then((data) => {
             this.setState({
-                cards: data
+                activities: data
             })
         }).catch(err => {
             console.log(err)
@@ -114,13 +114,13 @@ class Profile extends Component {
     delete = (id) => (e) => {
         const jwt = auth.isAuthenticated();
         deleteActivity(id, {t: jwt.token}).then(() => {
-            var cards = this.state.cards;
+            var activities = this.state.activities;
 
-            cards = cards.filter(function( obj ) {
+            activities = activities.filter(function( obj ) {
                 return obj._id !== id;
             });
 
-            this.setState({ cards, open: true, message: "Deleted Successfully" })
+            this.setState({ activities, open: true, message: "Deleted Successfully" })
         }).catch(err => {
             console.log(err)
         })
@@ -150,8 +150,8 @@ class Profile extends Component {
         }
 
 
+        const activities = this.state.activities.map((item, index) => {
 
-        const activities = this.state.cards.map((item, index) => {
             return (
                 <div className={classes.demo} key={index}>
 
@@ -168,7 +168,7 @@ class Profile extends Component {
                         primary: classes.primary
                     }}
                     primary={item.title}
-                    secondary={item.category + " | " + item.cards.length + " terms"}
+                    secondary={item.category + " | " + (item.activityType == "Flashcards" ? (item.cards.length + " terms") : (item.quiz.length + " questions"))}
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="Delete" onClick={this.delete(item._id)}>
