@@ -8,15 +8,40 @@ import Button from '@material-ui/core/Button'
 const styles = theme => ({
     activity: {
         width: 200,
-        minHeight: 100,
+        minHeight: 150,
         margin: 20,
-        padding: 40
+        padding: 40,
+        cursor: "pointer",
+        "&:hover": {
+            outline: "2px solid #1e90ff"
+        },
+        position: "relative"
     },
     container: {
         display: "flex"
     },
     button: {
         margin: 20
+    },
+    authorImg: {
+        borderRadius: 500,
+        width: 40,
+        display: "inline",
+        verticalAlign: "middle",
+        marginRight: 20
+    },
+    author: {
+        display: "inline",
+        verticalAlign: "middle"
+    },
+    byline: {
+        verticalAlign: "bottom",
+        position: "absolute",
+        bottom: 0,
+        marginBottom: 30
+    },
+    authorContainer: {
+        marginBottom: 20
     }
 })
 
@@ -58,18 +83,30 @@ class Base extends Component {
         const { classes } = this.props;
         const { activities } = this.state
 
+        console.log(activities)
+
         const list = activities.map((act, index) => {
-            return (<Paper elevation={4} key={index} className={classes.activity}>
+            return (<Paper elevation={4} key={index} className={classes.activity} onClick={this.goTo(act._id, act.activityType)}>
                 <Typography variant="h5">
                 {act.title}
                 </Typography>
                 <Typography variant="subtitle1">
-                {act.category} | {act.cards.length} terms
+                {act.category} | {act.activityType == "Flashcards" ? (<span>{act.cards.length} terms</span>) : (<span>{act.quiz.length} questions</span>)}
                 </Typography>
 
-                <Button variant="contained" color="secondary" className={classes.button} onClick={this.goTo(act._id, act.activityType)}>
-                    Play
-                </Button>
+                <div className={classes.byline}> 
+                    <div className={classes.authorContainer}>
+                        <img src={`https://github.com/identicons/${act.author.name}.png`} className={classes.authorImg} /> 
+                        <Typography variant="subtitle1" className={classes.author}>
+                            {act.author.name}
+                        </Typography>
+                    </div> 
+                    <div className={classes.date}>
+                        {(new Date(act.createDate)).toDateString()}
+                    </div>  
+                    
+                </div>
+                
             </Paper>)
         })
 

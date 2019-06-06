@@ -12,6 +12,8 @@ import { withRouter } from 'react-router-dom'
 import { convertFromRaw, EditorState, Editor } from 'draft-js'
 import { findActivity } from '../../../utils/api-activity'
 
+import Test from './Quiz/Test';
+
 const styles = theme => ({
     Card: {
         maxwidth: 600,

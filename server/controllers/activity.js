@@ -1,4 +1,5 @@
 import Flashcards from '../models/flashcards';
+import Quiz from '../models/quiz';
 import Activity from '../models/activity';
 import User from '../models/user';
 
@@ -70,7 +71,68 @@ export const updateFlashcards = (req, res) => {
 
 }
 
+
+export const updateQuiz = (req, res) => {
+
+    Activity.findById(req.body.id).exec((err, activity) => {
+
+        if (err || !activity) {
+            return res.status(400).json({
+                error: 'Activity not found!'
+            })
+        }
+
+        if (activity.author != req.auth._id) {
+            return res.status(400).json({
+                error: 'This activity does not belong to you!'
+            });
+        }
+
+        activity.title = req.body.title;
+        activity.category = req.body.category;
+        activity.quiz = req.body.quiz;
+
+        activity.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: "Quiz could not be created"
+                });
+            }
+
+
+            return res.json({
+                _id: result._id
+            })
+        })
+
+    })
+
+}
+
 export const createQuiz = (req, res) => {
+
+    var quizParams = {
+        title: req.body.title,
+        category: req.body.category,
+        author: req.auth._id,
+        quiz: req.body.quiz
+    }
+
+    const quiz = new Quiz(quizParams);
+    quiz.save((err, result) => {
+        if (err) {
+            console.log(err)
+            return res.status(400).json({
+                error: "Quiz could not be created"
+            });
+        }
+
+
+        return res.json({
+            _id: result._id
+        })
+    })
+
 
 }
 
@@ -126,8 +188,9 @@ export const deleteActivity = (req, res) => {
 }
 
 export const getAllActivities = (req, res) => {
-    Activity.find({}, (err, activities) => {
+    Activity.find({}).populate({model: User, path: "author"}).exec((err, activities) => {
         if (err || !activities) {
+            console.log(err)
             return res.status(400).json({
                 error: 'No activities found found!'
             });

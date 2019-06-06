@@ -126,8 +126,17 @@ class Profile extends Component {
         })
     }
 
-    goTo = (id) => (e) => {
-        this.props.history.push('/app/play?type=f&q='+id);
+    goTo = (id, type) => (e) => {
+
+        var path = '/app/play?q='+id;
+
+        if(type == "Flashcards"){
+            path+='&type=f'
+        }else{
+            path+='&type=q'
+        }
+
+        this.props.history.push(path);
     }
 
 

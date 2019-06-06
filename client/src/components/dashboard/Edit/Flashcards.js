@@ -256,7 +256,6 @@ class Flashcards extends Component {
                 category,
                 title
             }, { t: jwt.token }).then((data) => {
-                console.log(data)
                 if(data.error){
                     this.setState({
                         message: data.error,

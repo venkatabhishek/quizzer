@@ -3,6 +3,8 @@ import express from 'express';
 import {
     createFlashcards,
     updateFlashcards,
+    createQuiz,
+    updateQuiz,
     findActivity,
     getActivities,
     deleteActivity,
@@ -20,6 +22,10 @@ const router = express.Router();
 router.route('/activity/flashcard/create').post(requireSignin, createFlashcards);
 
 router.route('/activity/flashcard/update').post(requireSignin, updateFlashcards);
+
+router.route('/activity/quiz/create').post(requireSignin, createQuiz);
+
+router.route('/activity/quiz/update').post(requireSignin, updateQuiz);
 
 router.route('/activity/user').get(requireSignin, getActivities);
 

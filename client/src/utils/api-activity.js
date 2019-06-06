@@ -84,6 +84,73 @@ export const updateFlashcards = (flashcards, credentials) => {
 
 }
 
+
+export const createQuiz = (quiz, credentials) => {
+
+
+    if(!quiz.category){
+        quiz.category = 'Misc.'
+    }
+
+    if(!quiz.title){
+        quiz.title = 'Untitled'
+    }
+
+    return fetch('/activity/quiz/create', {
+        method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+		body: JSON.stringify(quiz)
+    }).then(response => {
+			return response.json();
+		})
+		.catch(err => console.log(err));
+}
+
+export const updateQuiz = (quiz, credentials) => {
+
+    // map editorStates to stringified json
+
+    var quizVars = {}
+
+    if(!quiz.category){
+        quizVars.category = 'Misc.'
+    }else{
+        quizVars.category = quiz.category;
+    }
+
+    if(!quiz.title){
+        quizVars.title = 'Untitled'
+    }else{
+        quizVars.title = quiz.title;
+    }
+
+    quizVars.quiz = quiz.quiz;
+
+
+    quizVars.id = quiz.id;
+
+    return fetch('/activity/quiz/update', {
+        method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+		body: JSON.stringify(quizVars)
+    }).then(response => {
+			return response.json();
+		})
+		.catch(err => {console.log(err)});
+
+
+}
+
+
+
 export const findActivity = (id) => {
     return fetch('/activity/' + id, {
         method: 'GET',
