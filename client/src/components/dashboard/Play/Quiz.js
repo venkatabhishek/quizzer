@@ -11,6 +11,9 @@ import queryString from 'query-string'
 
 import { findActivity } from '../../../utils/api-activity'
 
+
+import Test from './Quiz/Test';
+
 const styles = theme => ({
     headText: {
         padding: 55
@@ -56,12 +59,28 @@ class Quiz extends Component {
         this.state = {
             quiz: [],
             title: "",
-            category: ""
+            category: "",
+            test: false
         }
+
+        this.close.bind(this);
+        this.open.bind(this);
     }
 
     edit = () => {
         this.props.history.push('/app/edit?type=q&q='+this.state._id)
+    }
+
+    close = () => {
+        this.setState({
+            test: false
+        })
+    }
+
+    open = () => {
+        this.setState({
+            test: true
+        })
     }
 
     componentWillMount(){
@@ -86,7 +105,12 @@ class Quiz extends Component {
     render(){
         const { classes } = this.props;
 
-        const { quiz, title } = this.state;
+        const { quiz, title, test } = this.state;
+
+
+        if(test){
+            return (<Test close={this.close} />)
+        }
 
         return (
             <div style={{overflow: "hidden"}}>
@@ -97,12 +121,12 @@ class Quiz extends Component {
                     </Typography>
 
 
-                    
+
                     <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.edit}>
                         Edit
                     </Button>
 
-                    <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.edit}>
+                    <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.open}>
                         Test Me!
                     </Button>
 
@@ -132,7 +156,7 @@ class Quiz extends Component {
                     </div>)
                 })}
             </div>
-               
+
             </div>
         )
     }

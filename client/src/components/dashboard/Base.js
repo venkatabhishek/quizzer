@@ -5,6 +5,8 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 
+import Empty from '../../assets/empty.svg';
+
 const styles = theme => ({
     activity: {
         width: 200,
@@ -42,6 +44,19 @@ const styles = theme => ({
     },
     authorContainer: {
         marginBottom: 20
+    },
+    nocontent: {
+        textAlign: "center",
+        marginTop: 40
+    },
+    nocontentImg: {
+        height: "60vh",
+        position: "absolute",
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+        margin: "auto",
     }
 })
 
@@ -83,7 +98,15 @@ class Base extends Component {
         const { classes } = this.props;
         const { activities } = this.state
 
-        console.log(activities)
+        if(activities.length == 0){
+
+            return(<div className={classes.nocontent}>
+                <Typography variant="h5" style={{position: "relative", zIndex: 2}}>
+                    No Activities Found :(
+                </Typography>
+                <img src={Empty} alt={"Empty"} className={classes.nocontentImg} />
+            </div>)
+        }
 
         const list = activities.map((act, index) => {
             return (<Paper elevation={4} key={index} className={classes.activity} onClick={this.goTo(act._id, act.activityType)}>
@@ -94,19 +117,19 @@ class Base extends Component {
                 {act.category} | {act.activityType == "Flashcards" ? (<span>{act.cards.length} terms</span>) : (<span>{act.quiz.length} questions</span>)}
                 </Typography>
 
-                <div className={classes.byline}> 
+                <div className={classes.byline}>
                     <div className={classes.authorContainer}>
-                        <img src={`https://github.com/identicons/${act.author.name}.png`} className={classes.authorImg} /> 
+                        <img src={`https://github.com/identicons/${act.author.name}.png`} className={classes.authorImg} />
                         <Typography variant="subtitle1" className={classes.author}>
                             {act.author.name}
                         </Typography>
-                    </div> 
+                    </div>
                     <div className={classes.date}>
                         {(new Date(act.createDate)).toDateString()}
-                    </div>  
-                    
+                    </div>
+
                 </div>
-                
+
             </Paper>)
         })
 

@@ -59,7 +59,7 @@ const styles = theme => ({
         verticalAlign: "middle",
         marginBottom: 60,
         cursor: "pointer"
-        
+
     },
     content: {
         display: "grid",
@@ -108,7 +108,7 @@ class Quiz extends Component {
             exists: "",
             id: "",
             open: false,
-            current: 0
+            current: 0,
         }
     }
 
@@ -288,7 +288,7 @@ class Quiz extends Component {
 
     setCorrect = (index) => (e) => {
         var { quiz, current } = this.state
-        
+
         quiz[current].correct = index;
 
         this.setState({ quiz })
@@ -300,6 +300,9 @@ class Quiz extends Component {
         })
     }
 
+    play = () => {
+        this.props.history.push('/app/play?type=q&q='+this.state.id)
+    }
 
     render(){
         const { classes } = this.props;
@@ -347,7 +350,7 @@ class Quiz extends Component {
                     <div className={classes.actionButtons}>
                         <Button variant="contained" color="secondary" className={classes.actionButton}>Import</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save}>Save</Button>
-                        <Button variant="contained" color="secondary" className={classes.actionButton}>Play</Button>
+                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.play}>Play</Button>
                     </div>
                 </div>
 
@@ -395,7 +398,7 @@ class Quiz extends Component {
                                     name="radio-button-demo"
                                     inputProps={{ 'aria-label': 'A' }}
                                 />
-      
+
                                 </div>)
                             })}
 
