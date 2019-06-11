@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button'
 import logo from '../assets/logo.png'
 import Grid from '@material-ui/core/Grid';
@@ -16,6 +15,7 @@ import Search from '@material-ui/icons/Search';
 import Favorite from '@material-ui/icons/Favorite';
 import Share from '@material-ui/icons/Share';
 
+import { Link } from 'react-router-dom'
 
 
 const styles = theme => ({
@@ -59,12 +59,14 @@ const styles = theme => ({
         width: 150,
         height: 70,
         color: "white",
-        [theme.breakpoints.down('xs')]: {
-            display: "none"
-        },
         fontWeight: 500,
         borderRadius: 3,
         fontSize: 24
+    },
+    large: {
+        [theme.breakpoints.down('xs')]: {
+            display: "none"
+        },
     },
     mobile: {
         display: "none",
@@ -142,9 +144,6 @@ const styles = theme => ({
     squareLabel: {
         margin: "20px 0",
         textAlign: "center",
-        [theme.breakpoints.down('sm')]: {
-            lineHeight: "130px"
-        },
     },
     contactForm: {
         padding: 40,
@@ -153,15 +152,43 @@ const styles = theme => ({
     textField: {
         width: "100%",
         margin: "30px 0"
+    },
+    footer: {
+        background: "black",
+        color: "white",
+        padding: "25px 0"
+    },
+    mobileTop: {
+        marginTop: 60
+    },
+    link: {
+        textDecoration: "none"
     }
+
 
 });
 
 class Home extends Component {
-	render() {
+
+    constructor(props){
+        super(props);
+
+        this.state = {
+            email: "",
+            message: ""
+        }
+    }
+
+    onChange = (type) => (e) => {
+        this.setState({
+            [type]: e.target.value
+        })
+    }
+
+    render() {
 		const { classes } = this.props;
 		return (
-			<div>
+			<div style={{overflow: "hidden"}}>
 				<header className={classes.header}>
                     <div className={classes.logo}>
                         <img src={logo} className={classes.logoImg}/>
@@ -170,7 +197,11 @@ class Home extends Component {
                         </Typography>
                     </div>
                     <div className={classes.navbar}>
-                        <div className={classes.button}>Log In</div>
+                        <Link to="/signin" className={classes.link + " " + classes.large} style={{color: "white"}}>
+                                        <div className={classes.button}>
+                                           Login
+                                        </div>
+                                    </Link>
                     </div>
                 </header>
                 <main className={classes.main}>
@@ -187,7 +218,11 @@ class Home extends Component {
                                     <Typography variant="h5" className={classes.introText}>
                                         Quizzer is an all-in-one learning tool designed to accelerate your progress by providing a variety of tools in a convenient platform
                                     </Typography>
-                                    <div className={classes.button+" "+ classes.mobile}>Log In</div>
+                                     <Link to="/signup" className={classes.link} style={{color: "white"}}>
+                                        <div className={classes.button}>
+                                           Get Started
+                                        </div>
+                                    </Link>
 
                                 </Container>
                             </Grid>
@@ -231,7 +266,7 @@ class Home extends Component {
                                             <Search className={classes.icon}/>
                                         </div>
                                         <Typography className={classes.squareLabel}>
-                                            Searching
+                                            Advanced <br /> Searching
                                         </Typography>
                                     </div>
                                     <div className={classes.squareWrapper}>
@@ -239,7 +274,7 @@ class Home extends Component {
                                             <Favorite className={classes.icon}/>
                                         </div>
                                         <Typography className={classes.squareLabel}>
-                                            Favorites
+                                            Personalized <br /> Favorites
                                         </Typography>
                                     </div>
                                     <div className={classes.squareWrapper}>
@@ -247,7 +282,8 @@ class Home extends Component {
                                             <Share className={classes.icon}/>
                                         </div>
                                         <Typography className={classes.squareLabel}>
-                                            Sharing
+                                            Sharing +
+                                            <br />Social Media
                                         </Typography>
                                     </div>
 
@@ -263,33 +299,64 @@ class Home extends Component {
                                     <form noValidate autoComplete="off">
                                         <TextField
                                             id="standard-name"
-                                            label="Name"
+                                            label="Email"
+                                            placeholder="Enter your email address..."
                                             className={classes.textField}
-                                            value={"asdasd"}
+                                            value={this.state.email}
+                                            onChange={this.onChange("email")}
+                                            type="email"
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
                                             margin="normal"
                                         />
                                         <TextField
                                             id="standard-multiline-static"
-                                            label="Multiline"
+                                            label="Message"
+                                            placeholder="Enter your message/concern..."
                                             multiline
                                             rows="4"
-                                            defaultValue="Default Value"
+                                            value={this.state.message}
                                             className={classes.textField}
+                                            InputLabelProps={{
+                                                shrink: true,
+                                            }}
+                                            onChange={this.onChange("message")}
                                             margin="normal"
                                         />
+
+                                        <div className={classes.button} style={{margin: "auto"}}>Send</div>
                                         </form>
                                         </Container>
                                 </Paper>
                             </Grid>
                             <Grid item sm={6}>
-                                <Container className={classes.container}>
+                                <Container className={classes.container + " " + classes.mobileTop}>
                                     <Typography variant="h4">
-                                        Leave us a note
+                                        Leave us a note.
+                                    </Typography>
+                                    <Typography variant="h6" style={{fontWeight: "normal", marginTop: 10}}>
+                                        Have a quesiton or concern? Drop us a message and we'll get back to you ASAP
                                     </Typography>
                                 </Container>
                             </Grid>
                         </Grid>
                     </section>
+                    <footer className={classes.footer}>
+                        <Grid container spacing={8} className={classes.wrapperGrid}>
+                            <Grid item sm={4}>
+                            <Typography style={{margin: "40px 0", fontSize: "40px"}} >
+                        Quizzer
+                        </Typography>
+                            </Grid>
+                            <Grid item sm={8} style={{margin: "auto"}}>
+                                <Typography variant="h4" style={{float: "right"}}>
+                                    Made by <a href="https://venkatabhishek.github.io" style={{color: "white"}}>Abhishek Venkat</a>
+                                </Typography>
+                            </Grid>
+
+                        </Grid>
+                    </footer>
                 </main>
 			</div>
 		);
