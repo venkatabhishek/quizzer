@@ -22,6 +22,8 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom'
 
+
+
 import auth from '../components/auth/auth-helper';
 
 import {
@@ -114,6 +116,14 @@ const styles = theme => ({
     margin: 30
   },
 
+  appBar: {
+    zIndex: theme.zIndex.drawer + 1,
+    [theme.breakpoints.up("sm")]: {
+        width: "100%"
+    },
+    position: "fixed",
+  },
+
 
 });
 
@@ -121,8 +131,10 @@ class PrimarySearchAppBar extends React.Component {
   state = {
     anchorEl: null,
     mobileMoreAnchorEl: null,
-    open: false
+    open: false,
+    drawerOpen: false
   };
+
 
   handleProfileMenuOpen = event => {
     this.setState({ anchorEl: event.currentTarget });
@@ -132,6 +144,7 @@ class PrimarySearchAppBar extends React.Component {
     this.setState({ anchorEl: null });
     this.handleMobileMenuClose();
   };
+
 
   handleOpen = () => {
     this.setState({ open: true });
@@ -165,7 +178,7 @@ class PrimarySearchAppBar extends React.Component {
 
   render() {
     const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes } = this.props;
+    const { classes, toggleDrawer } = this.props;
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -178,6 +191,7 @@ class PrimarySearchAppBar extends React.Component {
         onClose={this.handleMenuClose}
       >
         <MenuItem onClick={this.navigate("profile")}>Profile</MenuItem>
+        <MenuItem onClick={this.navigate("Settings")}>Settings</MenuItem>
         <MenuItem onClick={this.logout()}>Logout</MenuItem>
       </Menu>
     );
@@ -204,11 +218,13 @@ class PrimarySearchAppBar extends React.Component {
       </Menu>
     );
 
+
+
     return (
       <div className={classes.root}>
-        <AppBar position="static">
+        <AppBar position="static" className={classes.appBar}>
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
+            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={toggleDrawer}>
               <MenuIcon />
             </IconButton>
             <Typography className={classes.title} variant="h6" color="inherit" noWrap onClick={this.navigate("")}>
@@ -300,6 +316,10 @@ class PrimarySearchAppBar extends React.Component {
         </Dialog>
         {renderMenu}
         {renderMobileMenu}
+
+
+
+
       </div>
     );
   }

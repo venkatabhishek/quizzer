@@ -82,10 +82,6 @@ class Profile extends Component {
         super(props);
 
         this.state = {
-            name: '',
-            password: '',
-            email: '',
-            error: '',
             activities: [],
             open: false,
             message: ""
@@ -104,12 +100,6 @@ class Profile extends Component {
             console.log(err)
         })
     }
-
-
-
-    handleChange = name => event => {
-        this.setState({ [name]: event.target.value });
-    };
 
     delete = (id) => (e) => {
         const jwt = auth.isAuthenticated();
@@ -193,44 +183,7 @@ class Profile extends Component {
                         </Paper>
                     </Grid>
                     <Grid item xs={8} >
-                        <Paper className={classes.paper} elevation={4}>
 
-                            <form autoComplete="off" className={classes.form}>
-                            <Typography variant="h4" style={{textAlign: "left"}}>
-                                Profile
-                            </Typography>
-                                <input type="text"
-                                    placeholder="Name..."
-                                    value={this.state.name}
-                                    onChange={this.handleChange('name')}
-                                    className={classes.item + " " + classes.input} />
-                                <br/>
-                                <input type="email"
-                                    placeholder="Email..."
-                                    value={this.state.email}
-                                    onChange={this.handleChange('email')}
-                                    className={classes.item + " " + classes.input} />
-                                <br/>
-                                <input type="password"
-                                    autoComplete="new-password"
-                                    placeholder="Password..."
-                                    value={this.state.password}
-                                    onChange={this.handleChange('password')}
-                                    className={classes.item + " " + classes.input} />
-                                <br/>
-                                <button type="submit" className={classes.submit}>
-                                    Update
-                                    </button>
-
-                            </form>
-                            <br/>
-                            {this.state.error && (
-                                <Typography variant="subtitle1" gutterBottom className={classes.item} style={{ color: "red" }}>
-                                    {this.state.error}
-                                </Typography>
-                            )}
-
-                        </Paper>
 
                         <Paper className={classes.paper} elevation={4}>
                             <Typography variant="h4" style={{textAlign: "left"}}>

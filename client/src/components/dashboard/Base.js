@@ -98,15 +98,7 @@ class Base extends Component {
         const { classes } = this.props;
         const { activities } = this.state
 
-        if(activities.length == 0){
 
-            return(<div className={classes.nocontent}>
-                <Typography variant="h5" style={{position: "relative", zIndex: 2}}>
-                    No Activities Found :(
-                </Typography>
-                <img src={Empty} alt={"Empty"} className={classes.nocontentImg} />
-            </div>)
-        }
 
         const list = activities.map((act, index) => {
             return (<Paper elevation={4} key={index} className={classes.activity} onClick={this.goTo(act._id, act.activityType)}>
