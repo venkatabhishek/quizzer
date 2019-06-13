@@ -136,6 +136,78 @@ export const createQuiz = (req, res) => {
 
 }
 
+export const likeActivity = (req, res) => {
+    var id = req.params.id;
+
+    User.findById(req.auth._id).exec((err, user) => {
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'No user found!'
+            });
+        }
+
+        var idx = user.liked.indexOf(id);
+
+
+        Activity.findById(id, (err, activity) => {
+            if (err || !activity) {
+                return res.status(400).json({
+                    error: 'No activity found!'
+                });
+            }
+
+            if (idx != -1) {
+                // unlike activity
+
+                user.liked.splice(idx, 1);
+
+                activity.likes--;
+
+
+
+            } else {
+                // like activity
+
+                user.liked.push(id);
+
+                activity.likes++;
+
+            }
+
+            activity.save((err, newActivity) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: 'Like could not be processed'
+                    });
+                }
+
+                user.save((error, newUser) => {
+
+                    if (error) {
+                        console.log(error)
+                        return res.status(400).json({
+                            error: 'User could not be processed'
+                        });
+                    }
+
+
+                    return res.json({
+                        id: newActivity._id
+                    })
+
+
+                })
+
+
+            })
+        })
+
+
+    })
+
+
+}
+
 export const findActivity = (req, res) => {
     var id = req.params.id;
     Activity.findById(id, (err, activity) => {
@@ -188,7 +260,7 @@ export const deleteActivity = (req, res) => {
 }
 
 export const getAllActivities = (req, res) => {
-    Activity.find({}).populate({model: User, path: "author"}).exec((err, activities) => {
+    Activity.find({}).populate({ model: User, path: "author" }).exec((err, activities) => {
         if (err || !activities) {
             console.log(err)
             return res.status(400).json({

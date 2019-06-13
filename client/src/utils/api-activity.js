@@ -150,6 +150,20 @@ export const updateQuiz = (quiz, credentials) => {
 }
 
 
+export const likeActivity = (id, credentials) => {
+    return fetch('/activity/like/'+id, {
+        method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+    }).then(response => {
+			return response.json();
+		})
+		.catch(err => {console.log(err)});
+}
+
 
 export const findActivity = (id) => {
     return fetch('/activity/' + id, {
