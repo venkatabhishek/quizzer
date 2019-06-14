@@ -15,7 +15,7 @@ import Home from '@material-ui/icons/Home'
 import AccountBox from '@material-ui/icons/AccountBox'
 import SettingsIcon from '@material-ui/icons/Settings'
 
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Link } from 'react-router-dom';
 
 
 import Profile from './dashboard/Profile';
@@ -23,48 +23,43 @@ import Base from './dashboard/Base';
 import Edit from './dashboard/Edit';
 import Play from './dashboard/Play'
 import Settings from './dashboard/Settings'
+import NoMatch from './NoMatch'
 
 var routes = [
     {
         path: "",
         exact: true,
         component: Base,
+        icon: Home,
+        name: "Home"
     },
     {
         path: "profile",
         exact: false,
         component: Profile,
+        icon: AccountBox,
+        name: "Profile"
     },
     {
         path: "edit",
         exact: false,
         component: Edit,
+        exclude: true
     },
     {
         path: "play",
         exact: false,
         component: Play,
+        exclude: true
     },
     {
         path: "settings",
         exact: false,
-        component: Settings
-    }
-]
+        component: Settings,
+         icon: SettingsIcon,
+         name: "Settings"
+    },
 
-var sideBar = [
-    {
-        name: "Home",
-        icon: Home
-    },
-    {
-        name: "Profile",
-        icon: AccountBox
-    },
-    {
-        name: "Settings",
-        icon: SettingsIcon
-    }
 ]
 
 const styles = theme => ({
@@ -81,6 +76,10 @@ const styles = theme => ({
     },
     navbarItem: {
         margin: "10px 0"
+    },
+    link: {
+        color: "black",
+        textDecoration: "none"
     }
 });
 
@@ -95,7 +94,8 @@ class Dashboard extends Component {
         };
         this.match = match;
     }
-    init = () => {
+
+    componentWillMount() {
         this.setState({ redirectToSignin: false })
         const jwt = auth.isAuthenticated();
         if (jwt) {
@@ -114,10 +114,6 @@ class Dashboard extends Component {
         } else {
             this.setState({ redirectToSignin: true });
         }
-    };
-
-    componentWillMount() {
-        this.init();
     }
 
     toggleDrawer = () => {
@@ -138,13 +134,14 @@ class Dashboard extends Component {
 
 
         const routesComponent = routes.map(({ path, component: Component, exact }, key) => (
-            <Route exact path={`${match.url}/${path}`}
+            <Route path={`/app/${path}`}
                 render={(props) => <Component {...props} user={user} />}
                 exact={exact}
                 key={key}
             />
         ));
 
+        const sideRoutes = routes.filter(r => !r.exclude)
 
         const sideList = (
             <div
@@ -154,12 +151,17 @@ class Dashboard extends Component {
                 style={{ marginTop: 64 }}
             >
                 <List>
-                    {sideBar.map(({name, icon: Icon}, index) => (
+                    {sideRoutes.map(({path, name, icon: Icon}, index) => {
+                        console.log(path)
+                        return ((
+                        <Link to={`/app/${path}`} className={classes.link}>
                         <ListItem button key={index} className={classes.navbarItem}>
                             <ListItemIcon><Icon /></ListItemIcon>
                             <ListItemText primary={name} />
                         </ListItem>
-                    ))}
+                        </Link>
+                    ))
+                    })}
                 </List>
 
             </div>
@@ -174,7 +176,7 @@ class Dashboard extends Component {
                 <div className={sideSpace} style={{paddingTop: 64}}>
                     <Switch>
                         {routesComponent}
-
+                        <Route component={NoMatch} />
                     </Switch>
                 </div>
                 <Drawer open={this.state.drawerOpen} onClose={this.toggleDrawer} variant="persistent" >
