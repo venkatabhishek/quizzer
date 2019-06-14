@@ -23,12 +23,7 @@ const userSchema = new Schema({
         type: String
     },
     // activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
-    liked: [
-        {
-            type: Schema.Types.ObjectId,
-            default: []
-        }
-    ]
+    liked: []
 });
 
 userSchema

@@ -137,9 +137,10 @@ export const createQuiz = (req, res) => {
 }
 
 export const likeActivity = (req, res) => {
-    var id = req.params.id;
+    const id = req.params.id;
 
-    User.findById(req.auth._id).exec((err, user) => {
+    User.findById(req.auth._id, (err, user) => {
+
         if (err || !user) {
             return res.status(400).json({
                 error: 'No user found!'
@@ -148,61 +149,43 @@ export const likeActivity = (req, res) => {
 
         var idx = user.liked.indexOf(id);
 
+        Activity.findById(id, (err1, activity) => {
 
-        Activity.findById(id, (err, activity) => {
-            if (err || !activity) {
+            if (err1 || !activity) {
                 return res.status(400).json({
                     error: 'No activity found!'
                 });
             }
 
-            if (idx != -1) {
-                // unlike activity
-
-                user.liked.splice(idx, 1);
-
-                activity.likes--;
-
-
-
-            } else {
-                // like activity
-
-                user.liked.push(id);
-
+            if (idx == -1) {
                 activity.likes++;
-
+                user.liked.push(id)
+            } else {
+                activity.likes--;
+                user.liked.splice(idx, 1)
             }
 
-            activity.save((err, newActivity) => {
-                if (err) {
+            activity.save(err2 => {
+                if (err2) {
                     return res.status(400).json({
-                        error: 'Like could not be processed'
-                    });
+                        error: "Activity save error"
+                    })
                 }
 
-                user.save((error, newUser) => {
-
-                    if (error) {
-                        console.log(error)
+                User.findOneAndUpdate({ _id: req.auth._id }, user, function(err3) {
+                    if (err3) {
                         return res.status(400).json({
-                            error: 'User could not be processed'
-                        });
+                            error: "User save error"
+                        })
                     }
 
-
-                    return res.json({
-                        id: newActivity._id
+                    res.json({
+                        message: "Success"
                     })
-
-
                 })
-
-
             })
+
         })
-
-
     })
 
 

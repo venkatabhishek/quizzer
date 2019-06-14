@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import config from './index';
 
+mongoose.set('useFindAndModify', false);
+
 const URI = config.mongoURI;
 mongoose.connect(URI, { useNewUrlParser: true, useCreateIndex: true  });
 

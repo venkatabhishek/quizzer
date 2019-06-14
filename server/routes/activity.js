@@ -12,7 +12,7 @@ import {
     likeActivity
 } from '../controllers/activity'
 
-import { requireSignin } from '../controllers/auth'
+import { requireSignin, hasAuthorization } from '../controllers/auth'
 
 import { findUserById } from '../controllers/user'
 
@@ -35,6 +35,7 @@ router.route('/activity/all').get(getAllActivities);
 router.route('/activity/like/:id').post(requireSignin, likeActivity)
 
 router.route('/activity/:id').get(findActivity).delete(requireSignin, deleteActivity);
+
 
 
 
