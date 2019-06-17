@@ -102,18 +102,29 @@ const styles = theme => ({
   },
   option: {
     margin: "auto",
-    maxWidth: "100% !important"
+    maxWidth: "100% !important",
+    [theme.breakpoints.down('sm')]: {
+        width:"100%",
+        flexBasis: "100%"
+    }
   },
   paper: {
     padding: theme.spacing(2),
     color: theme.palette.text.secondary,
-    margin: 25
+    margin: 25,
+    [theme.breakpoints.down('sm')]: {
+        flexBasis: "100%",
+        margin: "25px 0"
+    }
   },
   choose: {
     float: "right"
   },
   description: {
-    margin: 30
+    margin: 30,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
 
   appBar: {
@@ -281,7 +292,7 @@ class PrimarySearchAppBar extends React.Component {
 
             <Grid item xs={6} className={classes.option}>
               <Paper className={classes.paper+" "+classes.quiz} elevation={5}>
-                <Typography variant="h4">
+                <Typography variant="h4" style={{marginBottom: 10}}>
                   Quiz
                 </Typography>
                 <Typography variant="h5" className={classes.description} gutterBottom >
@@ -296,7 +307,7 @@ class PrimarySearchAppBar extends React.Component {
             <Grid item xs={6} className={classes.option}>
               <Paper className={classes.paper+" "+classes.flash} elevation={5}>
 
-                <Typography variant="h4">
+                <Typography variant="h4" style={{marginBottom: 10}}>
                   Flashcards
                 </Typography>
 

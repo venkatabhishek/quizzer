@@ -18,7 +18,7 @@ import Empty from '../../assets/empty.svg';
 
 const styles = theme => ({
     activity: {
-        width: 220,
+        minWidth: 220,
         minHeight: 150,
         margin: 20,
         padding: "20px 15px 20px 20px",
@@ -29,7 +29,8 @@ const styles = theme => ({
         position: "relative"
     },
     container: {
-        display: "flex"
+        display: "flex",
+        flexWrap: "wrap"
     },
     button: {
         margin: 20
@@ -56,12 +57,12 @@ class Base extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props)
 
         this.state = {
             activities: [],
             anchor: [],
             liked: [],
+            likes: []
         }
 
     }
@@ -203,11 +204,15 @@ class Base extends Component {
                             {(new Date(act.createDate)).toDateString()}
                         </Typography>
                     </div>
-                    <IconButton style={{ flexShrink: "0", flexGrow: 0 }} aria-label="More options" onClick={this.like(act._id)}>
+                    <div>
+
+                        <IconButton style={{ flexShrink: "0", flexGrow: 0 }} aria-label="More options" onClick={this.like(act._id)}>
                         {(liked.indexOf(act._id) == -1) ?
                             <FavoriteBorder /> :
                             <Favorite color="error" />}
-                    </IconButton>
+                        </IconButton>
+                    </div>
+
 
                 </div>
 

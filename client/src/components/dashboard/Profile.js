@@ -145,7 +145,7 @@ class Profile extends Component {
             return (
                 <div className={classes.demo} key={index}>
 
-                <ListItem button onClick={this.goTo(item._id)}>
+                <ListItem button onClick={this.goTo(item._id, item.activityType)}>
 
                   <ListItemAvatar>
                     <Avatar>
@@ -162,7 +162,7 @@ class Profile extends Component {
                   />
                   <ListItemSecondaryAction>
                     <IconButton edge="end" aria-label="Delete" onClick={this.delete(item._id)}>
-                      <DeleteIcon />
+                      <DeleteIcon color="error" />
                     </IconButton>
                   </ListItemSecondaryAction>
 
@@ -174,7 +174,7 @@ class Profile extends Component {
         return (
             <div >
                 <Grid container spacing={0} className={classes.grid}>
-                    <Grid item xs={4}>
+                    <Grid item sm={4} style={{minWidth: 375}}>
                         <Paper className={classes.paper} elevation={4}>
                             <img src={`https://github.com/identicons/${user.name}.png`} className={classes.logo} />
                             <Typography variant="h4" className={classes.name}>
@@ -182,7 +182,7 @@ class Profile extends Component {
                             </Typography>
                         </Paper>
                     </Grid>
-                    <Grid item xs={8} >
+                    <Grid item sm={8} >
 
 
                         <Paper className={classes.paper} elevation={4}>

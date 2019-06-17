@@ -152,9 +152,8 @@ class Dashboard extends Component {
             >
                 <List>
                     {sideRoutes.map(({path, name, icon: Icon}, index) => {
-                        console.log(path)
                         return ((
-                        <Link to={`/app/${path}`} className={classes.link}>
+                        <Link to={`/app/${path}`} className={classes.link} key={index}>
                         <ListItem button key={index} className={classes.navbarItem}>
                             <ListItemIcon><Icon /></ListItemIcon>
                             <ListItemText primary={name} />

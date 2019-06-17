@@ -37,10 +37,6 @@ const styles = theme => ({
         margin: 0,
         width: "100%"
     },
-    logo: {
-        width: 200,
-        height: 200
-    },
     column: {
         padding: 40
     },
@@ -121,7 +117,7 @@ class Settings extends Component {
         }
 
         return (
-            <div >
+            <div style={{minWidth: 400}}>
 
                 <Paper className={classes.paper} elevation={4}>
 
