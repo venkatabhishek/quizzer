@@ -16,7 +16,7 @@ import Test from './Quiz/Test';
 
 const styles = theme => ({
     Card: {
-        maxwidth: 600,
+        maxWidth: 600,
         maxHeight: 400,
         margin: "auto",
 
@@ -25,7 +25,7 @@ const styles = theme => ({
     flipCard:{
         perspective: "1000px",
         backgroundColor: "transparent",
-        width: 500,
+        width: 450,
         height: 225,
         margin: "auto",
         marginBottom: 80

@@ -254,3 +254,24 @@ export const getAllActivities = (req, res) => {
         return res.json(activities)
     })
 }
+
+export const searchActivities = (req, res) => {
+    var q = req.body.q;
+
+    Activity.find({
+        $text: {
+            $search: q
+        }
+    }).then(results => {
+        return res.json({
+            results
+        })
+    }).catch(err => {
+        console.log(err)
+        return res.status(400).json({
+            error: "Search error!"
+        })
+    })
+
+
+}

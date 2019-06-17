@@ -9,7 +9,8 @@ import {
     getActivities,
     deleteActivity,
     getAllActivities,
-    likeActivity
+    likeActivity,
+    searchActivities
 } from '../controllers/activity'
 
 import { requireSignin, hasAuthorization } from '../controllers/auth'
@@ -31,6 +32,8 @@ router.route('/activity/quiz/update').post(requireSignin, updateQuiz);
 router.route('/activity/user').get(requireSignin, getActivities);
 
 router.route('/activity/all').get(getAllActivities);
+
+router.route('/activity/search').post(searchActivities);
 
 router.route('/activity/like/:id').post(requireSignin, likeActivity)
 

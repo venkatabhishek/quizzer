@@ -18,7 +18,17 @@ const activitySchema = new Schema({
         default: "Misc."
     },
 }, {
-    discriminatorKey: "activityType"
-})
+        discriminatorKey: "activityType"
+    })
+
+activitySchema.index({
+    title: 'text',
+    category: 'text'
+}, {
+        weights: {
+            title: 5,
+            category: 1,
+        }
+    });
 
 export default mongoose.model('Activity', activitySchema);

@@ -223,3 +223,19 @@ export const getAllActivities = () => {
 		})
 		.catch(err => console.log(err));
 }
+
+export const searchActivities = (q) => {
+
+    return fetch('/activity/search', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ q })
+    })
+        .then(response => {
+            return response.json()
+        })
+        .catch(err => console.log(err))
+}

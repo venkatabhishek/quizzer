@@ -22,7 +22,7 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom'
 
-
+import { searchActivities } from '../utils/api-activity'
 
 import auth from '../components/auth/auth-helper';
 
@@ -143,7 +143,8 @@ class PrimarySearchAppBar extends React.Component {
     anchorEl: null,
     mobileMoreAnchorEl: null,
     open: false,
-    drawerOpen: false
+    drawerOpen: false,
+    search: ""
   };
 
 
@@ -178,6 +179,22 @@ class PrimarySearchAppBar extends React.Component {
     this.handleClose();
     this.handleMenuClose();
     this.props.history.push(`/app/${to}`)
+  }
+
+  onSearch = (e) => {
+      e.preventDefault();
+
+      searchActivities(this.state.search).then(results => {
+          console.log(results)
+      }).catch(err => {
+          console.log(err)
+      })
+  }
+
+  onChange = (e) => {
+      this.setState({
+          search: e.target.value
+      })
   }
 
   logout = () => (e) => {
@@ -245,13 +262,17 @@ class PrimarySearchAppBar extends React.Component {
               <div className={classes.searchIcon}>
                 <SearchIcon />
               </div>
+              <form onSubmit={this.onSearch}>
               <InputBase
                 placeholder="Search…"
                 classes={{
                   root: classes.inputRoot,
                   input: classes.inputInput,
                 }}
+                value={this.state.search}
+                onChange={this.onChange}
               />
+              </form>
             </div>
             <div className={classes.grow} />
             <div className={classes.sectionDesktop}>
