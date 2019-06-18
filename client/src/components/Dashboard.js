@@ -90,7 +90,7 @@ class Dashboard extends Component {
         this.state = {
             user: '',
             redirectToSignin: false,
-            drawerOpen: true
+            drawerOpen: false
         };
         this.match = match;
     }

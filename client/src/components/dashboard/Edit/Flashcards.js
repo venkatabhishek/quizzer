@@ -40,7 +40,10 @@ const styles = theme => ({
     },
     side: {
         padding: "0px 100px 0px 100px",
-        textAlign: "center"
+        textAlign: "center",
+        [theme.breakpoints.down('sm')]: {
+            padding: 0
+        }
     },
     sidecard: {
         border: "1px solid black",
@@ -64,7 +67,10 @@ const styles = theme => ({
         padding: 40,
         width: 400,
         height: 150,
-        overflowY: "auto"
+        overflowY: "auto",
+        [theme.breakpoints.down('sm')]: {
+            width: 200
+        }
     },
     current: {
         border: "1px solid #2196f3"
@@ -78,7 +84,10 @@ const styles = theme => ({
     actionButtons: {
         margin: "auto",
         marginBottom: 20,
-        float: "right"
+        float: "right",
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 40
+        }
     },
     textField: {
         marginTop: 0,
@@ -478,7 +487,7 @@ class Flashcards extends Component {
                 </div>
 
                 <Grid container spacing={8}>
-                    <Grid item xs={4}>
+                    <Grid item sm={4}>
                         <div className={classes.side}>
                             {sides}
                             <Button variant="contained" color="secondary" className={classes.button} onClick={this.addCard.bind(this)}>
@@ -486,9 +495,9 @@ class Flashcards extends Component {
                         </Button>
                         </div>
                     </Grid>
-                    <Grid item xs={8}>
+                    <Grid item sm={8}>
                         <Grid container spacing={8}>
-                            <Grid item xs={7}>
+                            <Grid item sm={7}>
                                 <div>
                                     <Paper className={classes.card}>
                                         <Typography variant="h5" component="h3">
@@ -514,7 +523,7 @@ class Flashcards extends Component {
                                     </Paper>
                                 </div>
                             </Grid>
-                            <Grid item xs={5}>
+                            <Grid item sm={5}>
                                 <div style={{ display: "flex", flexDirection: "column" }}>
                                     <div className={classes.toggleContainer}>
                                         <ToggleButtonGroup value={this.state.formats} onChange={this.handleFormat.bind(this)}>

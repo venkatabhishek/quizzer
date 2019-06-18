@@ -37,7 +37,10 @@ const styles = theme => ({
     actionButtons: {
         margin: "auto",
         marginBottom: 20,
-        float: "right"
+        float: "right",
+        [theme.breakpoints.down('sm')]: {
+            marginTop: 40
+        }
     },
     textField: {
         marginTop: 0,
@@ -85,7 +88,10 @@ const styles = theme => ({
     },
     side: {
         textAlign: "center",
-        padding: "0px 100px 0px 100px"
+        padding: "0px 100px 0px 100px",
+        [theme.breakpoints.down('sm')]: {
+            padding: 0
+        }
     },
     highlight: {
         border: "1px solid #1e90ff"
@@ -355,7 +361,7 @@ class Quiz extends Component {
                 </div>
 
                 <Grid container spacing={8}>
-                    <Grid item xs={4}>
+                    <Grid item sm={4}>
                     <div className={classes.side}>
                         {side}
 
@@ -364,7 +370,7 @@ class Quiz extends Component {
                             </Button>
                     </div>
                     </Grid>
-                    <Grid item xs={4}>
+                    <Grid item sm={4}>
                         <div className={classes.content}>
                             <TextField
                                 id="outlined-multiline-flexible"

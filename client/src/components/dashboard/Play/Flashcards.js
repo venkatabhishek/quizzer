@@ -28,7 +28,10 @@ const styles = theme => ({
         width: 450,
         height: 225,
         margin: "auto",
-        marginBottom: 80
+        marginBottom: 80,
+        [theme.breakpoints.down('sm')]: {
+            width: 300
+        }
 
     },
     under: {
@@ -37,7 +40,10 @@ const styles = theme => ({
         alignItems: "center",
         width: "30%",
         margin: "auto",
-        marginBottom: 20
+        marginBottom: 20,
+        [theme.breakpoints.down('sm')]: {
+            width: "55%"
+        }
     },
     flipCardInner: {
         height: "100%",
@@ -77,7 +83,18 @@ const styles = theme => ({
     list: {
         background: "#f5f5f5",
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        [theme.breakpoints.down('sm')]:{
+            display: "none"
+        }
+    },
+    mobileList: {
+        display: "none",
+        background: "#f5f5f5",
+        [theme.breakpoints.down('sm')]:{
+            display: "flex",
+            flexDirection: "column",
+        }
     },
     row: {
         display: "flex",
@@ -89,6 +106,13 @@ const styles = theme => ({
     minCard: {
         background: "white",
         width: "25%",
+        minHeight: 100,
+        margin: 40,
+        padding: 40
+    },
+    mobileMinCard: {
+        background: "white",
+        width: "100%",
         minHeight: 100,
         margin: 40,
         padding: 40
@@ -237,6 +261,21 @@ class Flashcards extends Component {
                                 <div className={classes.minCard}>
                                     <Editor readonly={true} editorState={card.back}/>
                                 </div>
+
+                        </div>)
+                    })}
+                </div>
+
+                <div className={classes.mobileList}>
+                    {cards.map((card, index) => {
+                        return (<div key={index} className={classes.row}>
+
+                                <div className={classes.mobileMinCard}>
+                                    <Editor readonly={true} editorState={card.front}/>
+                                    <br />
+                                    <Editor readonly={true} editorState={card.back}/>
+                                </div>
+
 
                         </div>)
                     })}

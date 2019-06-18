@@ -14,7 +14,9 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Empty from '../../assets/empty.svg';
-
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Dialog from '@material-ui/core/Dialog';
+import DialogContent from '@material-ui/core/DialogContent'
 
 const styles = theme => ({
     activity: {
@@ -62,7 +64,9 @@ class Base extends Component {
             activities: [],
             anchor: [],
             liked: [],
-            likes: []
+            likes: [],
+            detailsOpen: false,
+            details: {}
         }
 
     }
@@ -145,7 +149,7 @@ class Base extends Component {
         })
     }
 
-    goTo = (id, type) => (e) => {
+    goToPlay = (id, type) => (e) => {
 
 
         var path = '/app/play?q=' + id;
@@ -160,9 +164,43 @@ class Base extends Component {
 
     }
 
+    goToEdit = (id, type) => (e) => {
+
+        e.stopPropagation();
+
+        var path = '/app/edit?q=' + id;
+
+        if (type == "Flashcards") {
+            path += "&type=f"
+        } else {
+            path += "&type=q"
+        }
+
+        this.props.history.push(path)
+
+    }
+
+    handleClose = () => {
+        this.setState({
+            detailsOpen: false
+        })
+    }
+
+    handleDetailsOpen = (index) => (e) => {
+
+        e.stopPropagation();
+
+        var { activities } = this.state;
+
+        this.setState({
+            detailsOpen: true,
+            details: activities[index]
+        })
+    }
+
     render() {
         const { classes, user } = this.props;
-        const { activities, anchor, liked } = this.state;
+        const { activities, anchor, liked, detailsOpen, details } = this.state;
 
 
         const isOpen = anchor.map(an => {
@@ -170,7 +208,7 @@ class Base extends Component {
         })
 
         const list = activities.map((act, index) => {
-            return (<Paper elevation={4} key={index} className={classes.activity} onClick={this.goTo(act._id, act.activityType)}>
+            return (<Paper elevation={4} key={index} className={classes.activity} onClick={this.goToPlay(act._id, act.activityType)}>
                 <div className={classes.title}>
                     <div>
                         <Typography variant="h5">
@@ -190,9 +228,8 @@ class Base extends Component {
                         open={isOpen[index]}
                         onClose={this.handleMenuClose(index)}
                     >
-                        <MenuItem onClick={this.handleOpen(index)}>Play</MenuItem>
-                        <MenuItem onClick={this.handleOpen(index)}>Edit</MenuItem>
-                        <MenuItem onClick={this.handleOpen(index)}>Details</MenuItem>
+                        <MenuItem onClick={this.goToEdit(act._id, act.activityType)}>Edit</MenuItem>
+                        <MenuItem onClick={this.handleDetailsOpen(index)}>Details</MenuItem>
                     </Menu>
                 </div>
                 <div className={classes.bottom}>
@@ -207,14 +244,16 @@ class Base extends Component {
                     <div>
 
                         <IconButton style={{ flexShrink: "0", flexGrow: 0 }} aria-label="More options" onClick={this.like(act._id)}>
-                        {(liked.indexOf(act._id) == -1) ?
-                            <FavoriteBorder /> :
-                            <Favorite color="error" />}
+                            {(liked.indexOf(act._id) == -1) ?
+                                <FavoriteBorder /> :
+                                <Favorite color="error" />}
                         </IconButton>
                     </div>
 
 
                 </div>
+
+
 
             </Paper>)
         })
@@ -222,9 +261,29 @@ class Base extends Component {
         return (
             <div className={classes.container}>
                 {list}
+
+                <Dialog open={detailsOpen} onClose={this.handleClose} aria-labelledby="simple-dialog-title">
+                    {details ? (<div>
+                        <DialogTitle id="simple-dialog-title">{details.title} - {details.activityType}</DialogTitle>
+
+                        <DialogContent>
+                            <div style={{ margin: 20 }}>
+                                <Typography variant="h5" style={{ margin: 20 }}>
+                                    Category: {details.category}
+                                </Typography>
+                                <Typography variant="h5" style={{ margin: 20 }}>
+                                    No. of Term(s): {details.cards ? details.cards.length : ""}
+                                    {details.quiz ? details.cards.length : ""}
+                                </Typography>
+                            </div>
+                        </DialogContent>
+
+                    </div>) : <div></div>}
+
+                </Dialog>
             </div>
-        );
-    }
-}
+                );
+            }
+        }
 
 export default withStyles(styles)(Base);
