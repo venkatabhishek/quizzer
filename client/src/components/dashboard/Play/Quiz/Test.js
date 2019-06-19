@@ -148,15 +148,15 @@ class Test extends Component {
         }
 
         if(submit){
-            return(<div>
-                <Typography variant="h4">
+            return(<div style={{margin: 50}}>
+                <Typography variant="h3">
                     Results
                 </Typography>
 
-                <Typography variant="subtitle1">
+                <Typography variant="h5" style={{marginTop: 30}}>
                     You answered {p} correct out of {quiz.length} questions
                 </Typography>
-                <Typography variant="subtitle1">
+                <Typography variant="h5" style={{marginTop: 30}}>
                     {answers.filter(a => a==-1).length} Unanswered
                 </Typography>
             </div>)

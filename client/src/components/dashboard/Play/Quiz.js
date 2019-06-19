@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button';
 import Paper from '@material-ui/core/Paper'
+import Switch from '@material-ui/core/Switch';
+import Tooltip from '@material-ui/core/Tooltip';
 
 import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
@@ -39,7 +41,7 @@ const styles = theme => ({
         padding: 20,
         marginBottom: 40
     },
-    answer:{
+    answer: {
         padding: 20,
         marginBottom: 20
     },
@@ -48,19 +50,24 @@ const styles = theme => ({
     },
     correct: {
         outline: "2px solid #4BB543"
+    },
+    switch: {
+        float: "right",
+        marginLeft: 20
     }
 })
 
 class Quiz extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             quiz: [],
             title: "",
             category: "",
-            test: false
+            test: false,
+            showAnswer: false
         }
 
         this.close.bind(this);
@@ -68,7 +75,7 @@ class Quiz extends Component {
     }
 
     edit = () => {
-        this.props.history.push('/app/edit?type=q&q='+this.state._id)
+        this.props.history.push('/app/edit?type=q&q=' + this.state._id)
     }
 
     close = () => {
@@ -83,10 +90,10 @@ class Quiz extends Component {
         })
     }
 
-    componentWillMount(){
+    componentWillMount() {
         const values = queryString.parse(this.props.location.search);
 
-        if(values.q){
+        if (values.q) {
 
             findActivity(values.q).then((data) => {
 
@@ -95,32 +102,46 @@ class Quiz extends Component {
             }).catch(err => {
                 console.log(err)
             })
-        }else{
+        } else {
             this.setState({
                 exists: false
             })
         }
     }
 
-    render(){
+    changeShow = (e) => {
+        this.setState({
+            showAnswer: e.target.checked
+        })
+    }
+
+    render() {
         const { classes } = this.props;
 
-        const { quiz, title, test } = this.state;
+        const { quiz, title, test, showAnswer } = this.state;
 
 
-        if(test){
+        if (test) {
             return (<Test close={this.close} />)
         }
 
         return (
-            <div style={{overflow: "hidden"}}>
+            <div style={{ overflow: "hidden" }}>
 
-            <div className={classes.headText}>
+                <div className={classes.headText}>
                     <Typography variant="h4" className={classes.title}>
                         {title}
                     </Typography>
 
+                    <Tooltip title="Show Key" placement="top" className={classes.switch}>
+                    <Switch
+                        checked={showAnswer}
+                        onChange={this.changeShow}
+                        value="checkedA"
+                        inputProps={{ 'aria-label': 'secondary checkbox' }}
 
+                    />
+                    </Tooltip>
 
                     <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.edit}>
                         Edit
@@ -132,30 +153,31 @@ class Quiz extends Component {
 
                 </div>
 
-            <div>
-            {quiz.map((item, index) => {
-                    return (<div className={classes.question}>
-                        <div>
-                            <Grid container spacing={2}>
-                                <Grid item xs={5}>
-                                    <Paper elevation={2} className={classes.box}>
-                                        {item.question}
-                                    </Paper>
-                                </Grid>
-                                <Grid item xs={5}>
-                                    {item.answers.map((ans, idx) => {
-                                        var correct = idx == item.correct ? classes.correct : "";
+                <div>
+                    {quiz.map((item, index) => {
+                        return (<div className={classes.question}>
+                            <div>
+                                <Grid container spacing={2}>
+                                    <Grid item xs={5}>
+                                        <Paper elevation={2} className={classes.box}>
+                                            {item.question}
+                                        </Paper>
+                                    </Grid>
+                                    <Grid item xs={5}>
+                                        {item.answers.map((ans, idx) => {
+                                            var correct = idx == item.correct ? classes.correct : "";
+                                            var c = showAnswer ? correct : "" ;
 
-                                        return (<Paper elevation={2} className={classes.answer + " " + correct}>
-                                        {ans}
-                                        </Paper>)
-                                    })}
+                                            return (<Paper elevation={2} className={classes.answer + " " + c}>
+                                                {ans}
+                                            </Paper>)
+                                        })}
+                                    </Grid>
                                 </Grid>
-                            </Grid>
-                        </div>
-                    </div>)
-                })}
-            </div>
+                            </div>
+                        </div>)
+                    })}
+                </div>
 
             </div>
         )
