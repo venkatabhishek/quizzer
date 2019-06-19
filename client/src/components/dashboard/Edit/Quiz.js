@@ -354,7 +354,6 @@ class Quiz extends Component {
                     />
 
                     <div className={classes.actionButtons}>
-                        <Button variant="contained" color="secondary" className={classes.actionButton}>Import</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save}>Save</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.play}>Play</Button>
                     </div>

@@ -20,6 +20,7 @@ import { Switch, Route, Link } from 'react-router-dom';
 
 import Profile from './dashboard/Profile';
 import Base from './dashboard/Base';
+import Search from './dashboard/Search'
 import Edit from './dashboard/Edit';
 import Play from './dashboard/Play'
 import Settings from './dashboard/Settings'
@@ -50,6 +51,12 @@ var routes = [
         path: "play",
         exact: false,
         component: Play,
+        exclude: true
+    },
+    {
+        path: "search",
+        exact: false,
+        component: Search,
         exclude: true
     },
     {

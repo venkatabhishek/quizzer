@@ -480,7 +480,6 @@ class Flashcards extends Component {
                     />
 
                     <div className={classes.actionButtons}>
-                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.handleOpen}>Import</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save.bind(this)}>Save</Button>
                         <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.play}>Play</Button>
                     </div>

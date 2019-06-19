@@ -22,8 +22,6 @@ import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom'
 
-import { searchActivities } from '../utils/api-activity'
-
 import auth from '../components/auth/auth-helper';
 
 import {
@@ -184,11 +182,8 @@ class PrimarySearchAppBar extends React.Component {
   onSearch = (e) => {
       e.preventDefault();
 
-      searchActivities(this.state.search).then(results => {
-          console.log(results)
-      }).catch(err => {
-          console.log(err)
-      })
+
+      this.props.history.push('/app/search?q='+this.state.search)
   }
 
   onChange = (e) => {
