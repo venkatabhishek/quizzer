@@ -2,6 +2,7 @@ import Flashcards from '../models/flashcards';
 import Quiz from '../models/quiz';
 import Activity from '../models/activity';
 import User from '../models/user';
+import mongoose from 'mongoose'
 
 export const createFlashcards = (req, res) => {
 
@@ -212,6 +213,40 @@ export const getActivities = (req, res) => {
     });
 }
 
+export const getLikedActivities = (req, res) => {
+    User.findById(req.auth._id, (err, user) => {
+        if (err || !user) {
+            console.log(err)
+            return res.status(400).json({
+                error: 'User not found!'
+            });
+        }
+
+
+        var ids = user.liked.map(act => {
+            return mongoose.Types.ObjectId(act)
+        })
+
+        Activity.find({
+            _id: {
+                $in: ids
+            }
+        }, (err, docs) => {
+
+            if(err){
+                res.status(400).json({
+                    error: "Find error"
+                })
+            }
+
+            res.json(docs)
+        })
+
+
+    })
+}
+
+
 export const deleteActivity = (req, res) => {
     var id = req.params.id;
     Activity.findById(id, (err, activity) => {
@@ -315,3 +350,4 @@ export const setScore = (req, res) => {
 
     })
 }
+

@@ -18,7 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import auth from '../auth/auth-helper';
-import { getActivities, deleteActivity } from '../../utils/api-activity';
+import { findUserProfile, updateUserProfile } from '../../utils/api-user';
 
 import { withRouter } from "react-router";
 
@@ -78,12 +78,10 @@ class Settings extends Component {
         super(props);
 
         this.state = {
-            name: '',
-            password: '',
-            email: '',
             error: '',
             open: false,
-            message: ""
+            message: "",
+            password: ""
         };
 
 
@@ -91,13 +89,46 @@ class Settings extends Component {
 
     componentWillMount = () => {
         const jwt = auth.isAuthenticated();
-        getActivities({ t: jwt.token }).then((data) => {
-            this.setState({
-                activities: data
-            })
-        }).catch(err => {
-            console.log(err)
+
+        findUserProfile(
+            {
+                userId: jwt.user._id
+            },
+            { t: jwt.token }
+        ).then(data => {
+            this.setState(data)
+        });
+    }
+
+    onSubmit = (e) => {
+        e.preventDefault();
+
+        var params = {
+            password: this.state.password,
+            name: this.state.name,
+            email: this.state.email
+        }
+
+        const jwt = auth.isAuthenticated();
+
+        updateUserProfile(params, { t: jwt.token }).then(data => {
+            if (data.error) {
+                this.setState({
+                    error: data.error
+                })
+            } else {
+                this.setState({
+                    open: true,
+                    message: "Profile updated successfully"
+                })
+
+            }
+
+
         })
+
+
+
     }
 
 
@@ -117,11 +148,11 @@ class Settings extends Component {
         }
 
         return (
-            <div style={{minWidth: 400}}>
+            <div style={{ minWidth: 400 }}>
 
                 <Paper className={classes.paper} elevation={4}>
 
-                    <form autoComplete="off" className={classes.form}>
+                    <form autoComplete="off" className={classes.form} onSubmit={this.onSubmit}>
                         <Typography variant="h4" style={{ textAlign: "left" }}>
                             User Information
                             </Typography>

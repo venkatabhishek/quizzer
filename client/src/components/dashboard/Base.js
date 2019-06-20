@@ -20,7 +20,7 @@ import DialogContent from '@material-ui/core/DialogContent'
 
 const styles = theme => ({
     activity: {
-        minWidth: 220,
+        width: 220,
         minHeight: 150,
         margin: 20,
         padding: "20px 15px 20px 20px",
@@ -29,10 +29,6 @@ const styles = theme => ({
             outline: "2px solid #1e90ff"
         },
         position: "relative"
-    },
-    container: {
-        display: "flex",
-        flexWrap: "wrap"
     },
     button: {
         margin: 20
@@ -51,6 +47,19 @@ const styles = theme => ({
     },
     weight: {
         fontWeight: "normal"
+    },
+    helper: {
+        display: "flex",
+        flexWrap: "wrap"
+    },
+    big: {
+        width: 300,
+        height: 150,
+        margin: 20,
+        padding: 20
+    },
+    bigBtn: {
+        margin: "20px 40px 20px 20px"
     }
 })
 
@@ -192,6 +201,8 @@ class Base extends Component {
 
         var { activities } = this.state;
 
+        console.log(activities[index])
+
         this.setState({
             detailsOpen: true,
             details: activities[index]
@@ -201,7 +212,6 @@ class Base extends Component {
     render() {
         const { classes, user } = this.props;
         const { activities, anchor, liked, detailsOpen, details } = this.state;
-
 
         const isOpen = anchor.map(an => {
             return Boolean(an);
@@ -260,10 +270,29 @@ class Base extends Component {
 
         return (
             <div className={classes.container}>
-                {list}
+
+                <div className={classes.helper}>
+                    <Paper className={classes.big}>
+                        <Typography variant="h4">Make a new Activity</Typography>
+                        <Button variant="contained" color="secondary" className={classes.bigBtn}>GO</Button>
+                    </Paper>
+                    <Paper className={classes.big}>
+                        <Typography variant="h4" >Make a new Activity</Typography>
+                        <Button variant="contained" color="secondary" className={classes.bigBtn}>GO</Button>
+                    </Paper>
+                    <Paper className={classes.big}>
+                        <Typography variant="h4">Make a new Activity</Typography>
+                        <Button variant="contained" color="secondary" className={classes.bigBtn}>GO</Button>
+                    </Paper>
+                </div>
+                <br />
+                <div className={classes.acts}>
+                    {list}
+                </div>
+
 
                 <Dialog open={detailsOpen} onClose={this.handleClose} aria-labelledby="simple-dialog-title">
-                    {details ? (<div>
+                    {Object.keys(details).length != 0 ? (<div>
                         <DialogTitle id="simple-dialog-title">{details.title} - {details.activityType}</DialogTitle>
 
                         <DialogContent>
@@ -273,7 +302,7 @@ class Base extends Component {
                                 </Typography>
                                 <Typography variant="h5" style={{ margin: 20 }}>
                                     No. of Term(s): {details.cards ? details.cards.length : ""}
-                                    {details.quiz ? details.cards.length : ""}
+                                    {details.quiz ? details.quiz.length : ""}
                                 </Typography>
                             </div>
                         </DialogContent>

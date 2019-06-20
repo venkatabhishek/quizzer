@@ -18,7 +18,7 @@ import Snackbar from '@material-ui/core/Snackbar';
 import CloseIcon from '@material-ui/icons/Close';
 import Button from '@material-ui/core/Button';
 import auth from '../auth/auth-helper';
-import { getActivities, deleteActivity } from '../../utils/api-activity';
+import { getActivities, deleteActivity, getLikedActivities } from '../../utils/api-activity';
 
 import { withRouter } from "react-router";
 
@@ -61,14 +61,14 @@ const styles = theme => ({
         display: "table"
     },
     submit: {
-		outline: "none",
-		border: "none",
-		background: "#2196f3",
-		padding: "12px 20px 12px 20px",
-		borderRadius: 500,
-		color: "white",
-		margin: 25
-	},
+        outline: "none",
+        border: "none",
+        background: "#2196f3",
+        padding: "12px 20px 12px 20px",
+        borderRadius: 500,
+        color: "white",
+        margin: 25
+    },
     primary: {
         fontSize: 24
     }
@@ -78,11 +78,12 @@ const styles = theme => ({
 
 class Profile extends Component {
 
-    constructor(props){
+    constructor(props) {
         super(props);
 
         this.state = {
             activities: [],
+            liked: [],
             open: false,
             message: ""
         };
@@ -91,11 +92,18 @@ class Profile extends Component {
     }
 
     componentWillMount = () => {
-		const jwt = auth.isAuthenticated();
-		getActivities({t: jwt.token}).then((data) => {
-            this.setState({
-                activities: data
+        const jwt = auth.isAuthenticated();
+        getActivities({ t: jwt.token }).then((activities) => {
+
+            getLikedActivities({ t: jwt.token }).then(liked => {
+                this.setState({
+                    activities,
+                    liked
+                })
+            }).catch(err => {
+                console.log(err)
             })
+
         }).catch(err => {
             console.log(err)
         })
@@ -103,10 +111,10 @@ class Profile extends Component {
 
     delete = (id) => (e) => {
         const jwt = auth.isAuthenticated();
-        deleteActivity(id, {t: jwt.token}).then(() => {
+        deleteActivity(id, { t: jwt.token }).then(() => {
             var activities = this.state.activities;
 
-            activities = activities.filter(function( obj ) {
+            activities = activities.filter(function(obj) {
                 return obj._id !== id;
             });
 
@@ -118,12 +126,12 @@ class Profile extends Component {
 
     goTo = (id, type) => (e) => {
 
-        var path = '/app/play?q='+id;
+        var path = '/app/play?q=' + id;
 
-        if(type == "Flashcards"){
-            path+='&type=f'
-        }else{
-            path+='&type=q'
+        if (type == "Flashcards") {
+            path += '&type=f'
+        } else {
+            path += '&type=q'
         }
 
         this.props.history.push(path);
@@ -145,36 +153,63 @@ class Profile extends Component {
             return (
                 <div className={classes.demo} key={index}>
 
-                <ListItem button onClick={this.goTo(item._id, item.activityType)}>
+                    <ListItem button onClick={this.goTo(item._id, item.activityType)}>
 
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
+                        <ListItemAvatar>
+                            <Avatar>
+                                <FolderIcon />
+                            </Avatar>
+                        </ListItemAvatar>
 
-                  <ListItemText
-                  classes={{
-                        primary: classes.primary
-                    }}
-                    primary={item.title}
-                    secondary={item.category + " | " + (item.activityType == "Flashcards" ? (item.cards.length + " terms") : (item.quiz.length + " questions"))}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="Delete" onClick={this.delete(item._id)}>
-                      <DeleteIcon color="error" />
-                    </IconButton>
-                  </ListItemSecondaryAction>
+                        <ListItemText
+                            classes={{
+                                primary: classes.primary
+                            }}
+                            primary={item.title}
+                            secondary={item.category + " | " + (item.activityType == "Flashcards" ? (item.cards.length + " terms") : (item.quiz.length + " questions"))}
+                        />
+                        <ListItemSecondaryAction>
+                            <IconButton edge="end" aria-label="Delete" onClick={this.delete(item._id)}>
+                                <DeleteIcon color="error" />
+                            </IconButton>
+                        </ListItemSecondaryAction>
 
-                </ListItem>
-          </div>
-        )
+                    </ListItem>
+                </div>
+            )
+        })
+
+        const liked = this.state.liked.map((item, index) => {
+
+            return (
+                <div className={classes.demo} key={index}>
+
+                    <ListItem button onClick={this.goTo(item._id, item.activityType)}>
+
+                        <ListItemAvatar>
+                            <Avatar>
+                                <FolderIcon />
+                            </Avatar>
+                        </ListItemAvatar>
+
+                        <ListItemText
+                            classes={{
+                                primary: classes.primary
+                            }}
+                            primary={item.title}
+                            secondary={item.category + " | " + (item.activityType == "Flashcards" ? (item.cards.length + " terms") : (item.quiz.length + " questions"))}
+                        />
+
+
+                    </ListItem>
+                </div>
+            )
         })
 
         return (
             <div >
                 <Grid container spacing={0} className={classes.grid}>
-                    <Grid item sm={4} style={{minWidth: 375}}>
+                    <Grid item sm={4} style={{ minWidth: 375 }}>
                         <Paper className={classes.paper} elevation={4}>
                             <img src={`https://github.com/identicons/${user.name}.png`} className={classes.logo} />
                             <Typography variant="h4" className={classes.name}>
@@ -186,11 +221,20 @@ class Profile extends Component {
 
 
                         <Paper className={classes.paper} elevation={4}>
-                            <Typography variant="h4" style={{textAlign: "left"}}>
+                            <Typography variant="h4" style={{ textAlign: "left" }}>
                                 Your Activities
                             </Typography>
                             <List dense={true}>
-                            {activities}
+                                {activities.length != 0 ? activities : <Typography variant="h5">You have not made any activities</Typography>}
+                            </List>
+                        </Paper>
+
+                        <Paper className={classes.paper} elevation={4}>
+                            <Typography variant="h4" style={{ textAlign: "left" }}>
+                                Liked Activities
+                            </Typography>
+                            <List dense={true}>
+                                {liked.length != 0 ? liked : <Typography variant="h5">You have not liked any activities</Typography>}
                             </List>
                         </Paper>
 
@@ -199,26 +243,26 @@ class Profile extends Component {
                 </Grid>
                 <Snackbar
                     anchorOrigin={{
-                    vertical: 'bottom',
-                    horizontal: 'left',
+                        vertical: 'bottom',
+                        horizontal: 'left',
                     }}
                     open={this.state.open}
                     autoHideDuration={6000}
-                    onClose={() => {this.setState({open: false})}}
+                    onClose={() => { this.setState({ open: false }) }}
                     ContentProps={{
-                    'aria-describedby': 'message-id',
+                        'aria-describedby': 'message-id',
                     }}
                     message={<span id="message-id">{this.state.message}</span>}
                     action={[
-                    <IconButton
-                        key="close"
-                        aria-label="Close"
-                        color="inherit"
-                        className={classes.close}
-                        onClick={() => {this.setState({open: false})}}
-                    >
-                        <CloseIcon />
-                    </IconButton>,
+                        <IconButton
+                            key="close"
+                            aria-label="Close"
+                            color="inherit"
+                            className={classes.close}
+                            onClick={() => { this.setState({ open: false }) }}
+                        >
+                            <CloseIcon />
+                        </IconButton>,
                     ]}
                 />
             </div>

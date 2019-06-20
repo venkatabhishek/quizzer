@@ -210,6 +210,23 @@ export const getActivities = (credentials) => {
 		.catch(err => console.log(err));
 }
 
+export const getLikedActivities = (credentials) => {
+    return fetch('/activity/user/liked', {
+        method: 'GET',
+		headers: {
+			Accept: 'applierrcation/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+    })
+        .then(response => {
+			return response.json();
+		})
+		.catch(err => console.log(err));
+}
+
+
+
 export const getAllActivities = () => {
     return fetch('/activity/all', {
         method: 'GET',
