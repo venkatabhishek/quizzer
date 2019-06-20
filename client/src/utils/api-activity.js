@@ -239,3 +239,18 @@ export const searchActivities = (q) => {
         })
         .catch(err => console.log(err))
 }
+
+export const scoreActivity = (score, credentials) => {
+    return fetch('/activity/score', {
+        method: 'POST',
+		headers: {
+			Accept: 'application/json',
+			'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + credentials.t
+		},
+        body: JSON.stringify(score)
+    }).then(response => {
+			return response.json();
+		})
+		.catch(err => {console.log(err)});
+}

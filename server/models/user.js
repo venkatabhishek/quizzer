@@ -22,7 +22,11 @@ const userSchema = new Schema({
     salt: {
         type: String
     },
-    // activities: [{ type: Schema.Types.ObjectId, ref: 'Activity' }],
+    scores: {
+        type: Map,
+        of: Number,
+        default: {}
+    },
     liked: []
 });
 

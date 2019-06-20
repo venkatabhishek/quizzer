@@ -247,7 +247,7 @@ export const getAllActivities = (req, res) => {
         if (err || !activities) {
             console.log(err)
             return res.status(400).json({
-                error: 'No activities found found!'
+                error: 'No activities found!'
             });
         }
 
@@ -274,4 +274,44 @@ export const searchActivities = (req, res) => {
     })
 
 
+}
+
+
+export const setScore = (req, res) => {
+    User.findById(req.auth._id, (err, user) => {
+        if (err || !user) {
+            console.log(err)
+            return res.status(400).json({
+                error: 'User not found!'
+            });
+        }
+
+        var prevScore = user.scores.get((req.body.id).toString());
+
+        if (prevScore) {
+            if (req.body.score <= prevScore) {
+                // user scored better in the past
+
+                return res.status(400).json({
+                    error: 'You score better on a previous try. Better luck next time!'
+                });
+            }
+
+        }
+
+        user.scores.set((req.body.id).toString(), req.body.score);
+
+        User.findOneAndUpdate({ _id: req.auth._id }, user, function(error) {
+            if (error) {
+                return res.status(400).json({
+                    error: "User save error"
+                })
+            }
+
+            return res.json({
+                message: "Success"
+            })
+        })
+
+    })
 }

@@ -12,7 +12,9 @@ import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 
-import { findActivity } from '../../../../utils/api-activity'
+import { findActivity, scoreActivity } from '../../../../utils/api-activity'
+
+import auth from '../../../auth/auth-helper'
 
 const styles = theme => ({
     container: {
@@ -66,15 +68,15 @@ class Test extends Component {
     move = (val) => (e) => {
         var { current, quiz } = this.state;
 
-        if(current == (quiz.length-1) && val == 1){
+        if (current == (quiz.length - 1) && val == 1) {
             this.submit();
-        }else{
-            if(val == -1 && current == 0){
+        } else {
+            if (val == -1 && current == 0) {
                 val = 0;
             }
 
             this.setState({
-                current: current+val
+                current: current + val
             })
         }
 
@@ -87,15 +89,35 @@ class Test extends Component {
         const { quiz, answers } = this.state;
 
         quiz.map((item, index) => {
-            if(item.correct == answers[index]){
+            if (item.correct == answers[index]) {
                 p++;
             }
         })
 
-        this.setState({
-            p,
-            submit: true
+        var score = {
+            score: p / quiz.length,
+            id: this.state._id
+        }
+
+        const jwt = auth.isAuthenticated();
+
+        scoreActivity(score, { t: jwt.token }).then(data => {
+            var message = ""
+
+            if(data.error){
+                message = data.error
+            }else{
+                message = "Score saved successfully"
+            }
+
+            this.setState({
+                p,
+                submit: true,
+                message
+            })
         })
+
+
 
     }
 
@@ -141,23 +163,26 @@ class Test extends Component {
     render() {
         const { classes } = this.props;
 
-        const { quiz, title, current, answers, submit, p } = this.state;
+        const { quiz, title, current, answers, submit, p, message } = this.state;
 
         if (quiz.length == 0) {
             return (<div></div>)
         }
 
-        if(submit){
-            return(<div style={{margin: 50}}>
+        if (submit) {
+            return (<div style={{ margin: 50 }}>
                 <Typography variant="h3">
                     Results
                 </Typography>
 
-                <Typography variant="h5" style={{marginTop: 30}}>
+                <Typography variant="h5" style={{ marginTop: 30 }}>
                     You answered {p} correct out of {quiz.length} questions
                 </Typography>
-                <Typography variant="h5" style={{marginTop: 30}}>
-                    {answers.filter(a => a==-1).length} Unanswered
+                <Typography variant="h5" style={{ marginTop: 30 }}>
+                    {answers.filter(a => a == -1).length} Unanswered
+                </Typography>
+                <Typography variant="h5" style={{ marginTop: 30 }}>
+                    {message}
                 </Typography>
             </div>)
         }
