@@ -11,7 +11,9 @@ import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
 import queryString from 'query-string'
 
+import { findUserProfile } from '../../../utils/api-user'
 import { findActivity } from '../../../utils/api-activity'
+import auth from '../../auth/auth-helper'
 
 
 import Test from './Quiz/Test';
@@ -19,6 +21,11 @@ import Test from './Quiz/Test';
 const styles = theme => ({
     headText: {
         padding: 55
+    },
+    prevScore: {
+        padding: "10px 55px",
+        margin: "10px 40px",
+        marginBottom: 40
     },
     title: {
         margin: 40,
@@ -67,7 +74,8 @@ class Quiz extends Component {
             title: "",
             category: "",
             test: false,
-            showAnswer: false
+            showAnswer: false,
+            user: null
         }
 
         this.close.bind(this);
@@ -97,7 +105,20 @@ class Quiz extends Component {
 
             findActivity(values.q).then((data) => {
 
-                this.setState(data)
+                this.setState(data, () => {
+                    const jwt = auth.isAuthenticated();
+
+                    findUserProfile(
+                        {
+                            userId: jwt.user._id
+                        },
+                        { t: jwt.token }
+                    ).then(user => {
+                        this.setState({
+                            user
+                        })
+                    });
+                })
 
             }).catch(err => {
                 console.log(err)
@@ -118,7 +139,16 @@ class Quiz extends Component {
     render() {
         const { classes } = this.props;
 
-        const { quiz, title, test, showAnswer } = this.state;
+        const { quiz, title, test, showAnswer, user } = this.state;
+
+        var p = -1;
+
+        if(user && this.state._id){
+            var q = user.scores[this.state._id];
+            if(p){
+                p = q;
+            }
+        }
 
 
         if (test) {
@@ -134,13 +164,13 @@ class Quiz extends Component {
                     </Typography>
 
                     <Tooltip title="Show Key" placement="top" className={classes.switch}>
-                    <Switch
-                        checked={showAnswer}
-                        onChange={this.changeShow}
-                        value="checkedA"
-                        inputProps={{ 'aria-label': 'secondary checkbox' }}
+                        <Switch
+                            checked={showAnswer}
+                            onChange={this.changeShow}
+                            value="checkedA"
+                            inputProps={{ 'aria-label': 'secondary checkbox' }}
 
-                    />
+                        />
                     </Tooltip>
 
                     <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.edit}>
@@ -152,10 +182,12 @@ class Quiz extends Component {
                     </Button>
 
                 </div>
-
+                <div className={classes.prevScore}>
+                    {p != -1 ? <Typography variant="h5">You best score: {p*100}%</Typography> : ""}
+                </div>
                 <div>
                     {quiz.map((item, index) => {
-                        return (<div className={classes.question}>
+                        return (<div className={classes.question} key={index}>
                             <div>
                                 <Grid container spacing={2}>
                                     <Grid item xs={5}>
@@ -166,9 +198,9 @@ class Quiz extends Component {
                                     <Grid item xs={5}>
                                         {item.answers.map((ans, idx) => {
                                             var correct = idx == item.correct ? classes.correct : "";
-                                            var c = showAnswer ? correct : "" ;
+                                            var c = showAnswer ? correct : "";
 
-                                            return (<Paper elevation={2} className={classes.answer + " " + c}>
+                                            return (<Paper elevation={2} className={classes.answer + " " + c} key={idx}>
                                                 {ans}
                                             </Paper>)
                                         })}

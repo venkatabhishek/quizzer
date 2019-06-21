@@ -18,6 +18,8 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import DialogContent from '@material-ui/core/DialogContent'
 
+import BaseImg from '../../assets/base.svg'
+
 const styles = theme => ({
     activity: {
         width: 220,
@@ -50,7 +52,10 @@ const styles = theme => ({
     },
     helper: {
         display: "flex",
-        flexWrap: "wrap"
+        justifyContent: "center",
+        alignItems: "center",
+        background: "#fafafa",
+        padding: "30px 0"
     },
     big: {
         width: 300,
@@ -60,6 +65,18 @@ const styles = theme => ({
     },
     bigBtn: {
         margin: "20px 40px 20px 20px"
+    },
+    helpBtn: {
+        margin: 20,
+        padding: "5px 20px"
+    },
+    helpTxt: {
+        margin: 25
+    },
+    img: {
+        [theme.breakpoints.down('sm')]: {
+            display: "none  "
+        }
     }
 })
 
@@ -195,6 +212,10 @@ class Base extends Component {
         })
     }
 
+    helpLoc = () => {
+        this.props.history.push('/app/edit?type=f')
+    }
+
     handleDetailsOpen = (index) => (e) => {
 
         e.stopPropagation();
@@ -272,21 +293,30 @@ class Base extends Component {
             <div className={classes.container}>
 
                 <div className={classes.helper}>
-                    <Paper className={classes.big}>
-                        <Typography variant="h4">Make a new Activity</Typography>
-                        <Button variant="contained" color="secondary" className={classes.bigBtn}>GO</Button>
-                    </Paper>
-                    <Paper className={classes.big}>
-                        <Typography variant="h4" >Make a new Activity</Typography>
-                        <Button variant="contained" color="secondary" className={classes.bigBtn}>GO</Button>
-                    </Paper>
-                    <Paper className={classes.big}>
-                        <Typography variant="h4">Make a new Activity</Typography>
-                        <Button variant="contained" color="secondary" className={classes.bigBtn}>GO</Button>
-                    </Paper>
+                    <div style={{width: "50%"}}>
+                        <Typography variant="h4" className={classes.helpTxt}>
+                            Welcome to Quizzer.
+                        </Typography>
+                        <Typography variant="h6" className={classes.helpTxt} style={{fontWeight: "normal"}}>
+                            Explore the free online tools to create flashcards, quizzes, and test yourself in a variety of subjects
+                        </Typography>
+
+                        <div>
+                            <Button variant="contained" color="secondary" className={classes.helpBtn} onClick={this.helpLoc}>
+                                Start Activity
+                            </Button>
+                            <Button variant="contained" color="secondary" className={classes.helpBtn}>
+                                Resources
+                            </Button>
+                        </div>
+                    </div>
+                    <img src={BaseImg} alt="" style={{width: "20%"}} className={classes.img}/>
                 </div>
                 <br />
                 <div className={classes.acts}>
+                    <Typography variant="h5" className={classes.helpTxt} style={{fontWeight: "normal"}}>
+                            Explore some Activities
+                        </Typography>
                     {list}
                 </div>
 
