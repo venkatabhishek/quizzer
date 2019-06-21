@@ -1,9 +1,7 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import config from './server/config';
-import userRoutes from './server/routes/user';
-import authRoutes from './server/routes/auth';
-import activityRoutes from './server/routes/activity';
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const config = require('./server/config');
+const routes = require('./routes/index.js');
 
 // DB connection
 require('./server/config/dbConnection');
@@ -15,10 +13,13 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+// react app
+
+app.use(express.static('client/build'));
+
 // routes
-app.use('/', userRoutes);
-app.use('/', authRoutes);
-app.use('/', activityRoutes);
+
+app.use(routes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
