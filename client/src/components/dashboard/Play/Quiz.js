@@ -20,7 +20,13 @@ import Test from './Quiz/Test';
 
 const styles = theme => ({
     headText: {
-        padding: 55
+        padding: 55,
+        display: "block",
+        [theme.breakpoints.down('sm')]: {
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column"
+        }
     },
     prevScore: {
         padding: "10px 55px",
@@ -36,7 +42,10 @@ const styles = theme => ({
     },
     editBtn: {
         float: "right",
-        marginLeft: 20
+        marginLeft: 20,
+        [theme.breakpoints.down('sm')]: {
+            marginLeft: 5
+        }
     },
     column: {
         margin: "auto"
@@ -50,7 +59,10 @@ const styles = theme => ({
     },
     answer: {
         padding: 20,
-        marginBottom: 20
+        marginBottom: 20,
+        [theme.breakpoints.down('sm')]: {
+            width: 300
+        }
     },
     question: {
         marginBottom: 40
@@ -61,6 +73,11 @@ const styles = theme => ({
     switch: {
         float: "right",
         marginLeft: 20
+    },
+    container: {
+        [theme.breakpoints.down('sm')]: {
+            justifyContent: "center"
+        }
     }
 })
 
@@ -163,6 +180,7 @@ class Quiz extends Component {
                         {title}
                     </Typography>
 
+                    <div style={{float: "right"}}>
                     <Tooltip title="Show Key" placement="top" className={classes.switch}>
                         <Switch
                             checked={showAnswer}
@@ -180,6 +198,7 @@ class Quiz extends Component {
                     <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.open}>
                         Test Me!
                     </Button>
+                    </div>
 
                 </div>
                 <div className={classes.prevScore}>
@@ -189,13 +208,14 @@ class Quiz extends Component {
                     {quiz.map((item, index) => {
                         return (<div className={classes.question} key={index}>
                             <div>
-                                <Grid container spacing={2}>
-                                    <Grid item xs={5}>
+                                <Grid container spacing={2} className={classes.container}>
+                                    <Grid item sm={5}>
                                         <Paper elevation={2} className={classes.box}>
                                             {item.question}
                                         </Paper>
                                     </Grid>
-                                    <Grid item xs={5}>
+                                    <Grid item sm={5}>
+                                        <div>
                                         {item.answers.map((ans, idx) => {
                                             var correct = idx == item.correct ? classes.correct : "";
                                             var c = showAnswer ? correct : "";
@@ -204,6 +224,7 @@ class Quiz extends Component {
                                                 {ans}
                                             </Paper>)
                                         })}
+                                        </div>
                                     </Grid>
                                 </Grid>
                             </div>

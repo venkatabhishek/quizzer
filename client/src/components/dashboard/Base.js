@@ -77,6 +77,12 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             display: "none  "
         }
+    },
+    back: {
+        width: "50%",
+        [theme.breakpoints.down('sm')]: {
+            width: "100%",
+        }
     }
 })
 
@@ -293,7 +299,7 @@ class Base extends Component {
             <div className={classes.container}>
 
                 <div className={classes.helper}>
-                    <div style={{width: "50%"}}>
+                    <div className={classes.back}>
                         <Typography variant="h4" className={classes.helpTxt}>
                             Welcome to Quizzer.
                         </Typography>
