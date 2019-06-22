@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "dev": "babel-watch index.js",
-    "start": "node index.js"
+    "build": "./node_modules/.bin/babel . -d lib --copy-files --ignore node_modules,client",
+    "clean": "rm -rf lib",
+    "start": "cd lib && node index.js"
   },
   "keywords": [],
   "author": "",

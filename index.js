@@ -1,7 +1,7 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const config = require('./server/config');
-const routes = require('./routes/index.js');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import config from './server/config';
+import routes from './server/routes';
 
 // DB connection
 require('./server/config/dbConnection');
