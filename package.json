@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "babel-watch index.js",
-    "build": "npm run build --prefix client && ./node_modules/.bin/babel . -d build --copy-files --ignore node_modules,client",
-    "clean": "rm -rf build && rm -rf client/build",
+    "build": "./node_modules/.bin/babel . -d build --copy-files --ignore node_modules,client",
+    "clean": "rm -rf build",
     "start": "cd build && node index.js"
   },
   "keywords": [],
