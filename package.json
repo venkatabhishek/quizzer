@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "babel-watch index.js",
-    "build": "./node_modules/.bin/babel . -d build --copy-files --ignore node_modules,client",
+    "heroku-prebuild": "npm run clean",
+    "build": "./node_modules/.bin/babel index.js -d build && ./node_modules/.bin/babel server -d build/server && cp -r client/ build/",
     "clean": "rm -rf build",
     "start": "cd build && node index.js"
   },
