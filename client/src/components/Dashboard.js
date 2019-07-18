@@ -4,6 +4,7 @@ import auth from './auth/auth-helper';
 import { findUserProfile } from '../utils/api-user.js';
 import { Redirect } from 'react-router-dom';
 import Navbar from './Navbar';
+import Sidebar from './Sidebar'
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
 import Divider from '@material-ui/core/Divider';
@@ -87,7 +88,8 @@ const styles = theme => ({
     link: {
         color: "black",
         textDecoration: "none"
-    }
+    },
+
 });
 
 class Dashboard extends Component {
@@ -178,15 +180,16 @@ class Dashboard extends Component {
         return (
             <div className={classes.main}>
                 <Navbar navigate={this.navigate} toggleDrawer={this.toggleDrawer.bind(this)} />
-                <div className={sideSpace}>
-                    <Switch>
-                        {routesComponent}
-                        <Route component={NoMatch} />
-                    </Switch>
+                <div style={{display: "flex"}}>
+                    <Sidebar/>
+                    <div className={sideSpace}>
+                        <Switch>
+                            {routesComponent}
+                            <Route component={NoMatch} />
+                        </Switch>
+                    </div>
                 </div>
-                <Drawer open={this.state.drawerOpen} onClose={this.toggleDrawer} variant="persistent" >
-                    {sideList}
-                </Drawer>
+
             </div>
         );
     }

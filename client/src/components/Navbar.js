@@ -44,7 +44,8 @@ const styles = theme => ({
         fontWeight: 700,
         display: 'flex',
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+        flexShrink: 0
     },
     search: {
         display: 'flex',
@@ -72,6 +73,11 @@ const styles = theme => ({
         outline: 'none',
         fontSize: 18,
         width: "100%",
+        '&::placeholder': {
+            color: "#acacac"
+        },
+        fontFamily: '"Montserrat", sans-serif',
+        fontWeight: 600
     },
     create: {
         width: 190,
@@ -232,7 +238,7 @@ class PrimarySearchAppBar extends React.Component {
                     </div>
                     <div className={classes.full}>
                         <div className={classes.search}>
-                            <SearchIcon className={classes.light} style={{ margin: 30 }} />
+                            <SearchIcon className={classes.light} style={{ margin: 40 }} />
                             <form style={{ width: "100%" }}>
                                 <input
                                     placeholder="Search by keyword or tags..."

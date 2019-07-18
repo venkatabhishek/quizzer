@@ -21,11 +21,16 @@ import DialogContent from '@material-ui/core/DialogContent'
 import BaseImg from '../../assets/base.svg'
 
 const styles = theme => ({
+    container: {
+        padding: "20px 0px 0px 40px"
+    },
     activity: {
         width: 220,
-        minHeight: 150,
+        minHeight: 250,
         margin: 20,
-        padding: "20px 15px 20px 20px",
+        boxShadow: "0px 15px 38px rgba(0, 0, 0, 0.15)",
+        borderRadius: 24,
+        padding: 20,
         cursor: "pointer",
         "&:hover": {
             outline: "2px solid #1e90ff"
@@ -300,8 +305,8 @@ class Base extends Component {
 
 
                 <div className={classes.acts}>
-                    <Typography variant="h5" className={classes.helpTxt} style={{fontWeight: "normal"}}>
-                            Explore some Activities
+                    <Typography variant="h5" className={classes.helpTxt} style={{ fontWeight: "normal" }}>
+                        Explore some Activities
                         </Typography>
                     {list}
                 </div>
@@ -327,8 +332,8 @@ class Base extends Component {
 
                 </Dialog>
             </div>
-                );
-            }
-        }
+        );
+    }
+}
 
 export default withStyles(styles)(Base);
