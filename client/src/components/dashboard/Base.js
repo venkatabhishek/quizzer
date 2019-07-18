@@ -298,27 +298,7 @@ class Base extends Component {
         return (
             <div className={classes.container}>
 
-                <div className={classes.helper}>
-                    <div className={classes.back}>
-                        <Typography variant="h4" className={classes.helpTxt}>
-                            Welcome to Quizzer.
-                        </Typography>
-                        <Typography variant="h6" className={classes.helpTxt} style={{fontWeight: "normal"}}>
-                            Explore the free online tools to create flashcards, quizzes, and test yourself in a variety of subjects
-                        </Typography>
 
-                        <div>
-                            <Button variant="contained" color="secondary" className={classes.helpBtn} onClick={this.helpLoc}>
-                                Start Activity
-                            </Button>
-                            <Button variant="contained" color="secondary" className={classes.helpBtn}>
-                                Resources
-                            </Button>
-                        </div>
-                    </div>
-                    <img src={BaseImg} alt="" style={{width: "20%"}} className={classes.img}/>
-                </div>
-                <br />
                 <div className={classes.acts}>
                     <Typography variant="h5" className={classes.helpTxt} style={{fontWeight: "normal"}}>
                             Explore some Activities

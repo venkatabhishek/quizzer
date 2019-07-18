@@ -155,7 +155,6 @@ class Dashboard extends Component {
                 className={classes.list}
                 role="presentation"
                 onKeyDown={this.toggleDrawer}
-                style={{ marginTop: 64 }}
             >
                 <List>
                     {sideRoutes.map(({path, name, icon: Icon}, index) => {
@@ -179,7 +178,7 @@ class Dashboard extends Component {
         return (
             <div className={classes.main}>
                 <Navbar navigate={this.navigate} toggleDrawer={this.toggleDrawer.bind(this)} />
-                <div className={sideSpace} style={{paddingTop: 64}}>
+                <div className={sideSpace}>
                     <Switch>
                         {routesComponent}
                         <Route component={NoMatch} />

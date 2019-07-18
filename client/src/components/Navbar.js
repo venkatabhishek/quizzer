@@ -25,335 +25,249 @@ import { Link } from 'react-router-dom'
 import auth from '../components/auth/auth-helper';
 
 import {
-  withRouter
+    withRouter
 } from 'react-router-dom'
 
 
 const styles = theme => ({
-  root: {
-    width: '100%',
-  },
-  grow: {
-    flexGrow: 1,
-  },
-  menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
-  },
-  title: {
-    display: 'none',
-    [theme.breakpoints.up('sm')]: {
-      display: 'block',
-    },
-    cursor: "pointer"
-  },
-  search: {
-    position: 'relative',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
-    marginRight: theme.spacing(2),
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(3),
-      width: 'auto',
-    },
-  },
-  searchIcon: {
-    width: theme.spacing(9),
-    height: '100%',
-    position: 'absolute',
-    pointerEvents: 'none',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  inputRoot: {
-    color: 'inherit',
-    width: '100%',
-  },
-  inputInput: {
-    paddingTop: theme.spacing(),
-    paddingRight: theme.spacing(),
-    paddingBottom: theme.spacing(),
-    paddingLeft: theme.spacing(10),
-    transition: theme.transitions.create('width'),
-    width: '100%',
-    [theme.breakpoints.up('md')]: {
-      width: 200,
-    },
-  },
-  sectionDesktop: {
-    display: 'none',
-    [theme.breakpoints.up('md')]: {
-      display: 'flex',
-    },
-  },
-  sectionMobile: {
-    display: 'flex',
-    [theme.breakpoints.up('md')]: {
-      display: 'none',
-    },
-  },
-  option: {
-    margin: "auto",
-    maxWidth: "100% !important",
-    [theme.breakpoints.down('sm')]: {
-        width:"100%",
-        flexBasis: "100%"
-    }
-  },
-  paper: {
-    padding: theme.spacing(2),
-    color: theme.palette.text.secondary,
-    margin: 25,
-    [theme.breakpoints.down('sm')]: {
-        flexBasis: "100%",
-        margin: "25px 0"
-    }
-  },
-  choose: {
-    float: "right"
-  },
-  description: {
-    margin: 30,
-    [theme.breakpoints.down('sm')]: {
-      display: 'none',
-    },
-  },
 
-  appBar: {
-    zIndex: theme.zIndex.drawer + 1,
-    [theme.breakpoints.up("sm")]: {
-        width: "100%"
+    root: {
+        width: '100%',
+        height: 100,
+        fontFamily: '"Montserrat", sans-serif',
+        background: "#fff"
     },
-    position: "fixed",
-  },
+    logo: {
+        width: 500,
+        height: "100%",
+        fontSize: "36px",
+        fontWeight: 700,
+        display: 'flex',
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    search: {
+        display: 'flex',
+        alignItems: "center",
+        width: "100%",
+    },
+    light: {
+        color: "#ACACAC"
+    },
+    full: {
+        height: "100%",
+        width: "100%",
+        display: 'flex',
+        alignItems: "center"
+    },
+    fullInner: {
+        height: "100%",
+        width: "100%",
+        display: 'flex',
+        alignItems: "center",
+        justifyContent: "flex-end",
+    },
+    searchInput: {
+        border: 'none',
+        outline: 'none',
+        fontSize: 18,
+        width: "100%",
+    },
+    create: {
+        width: 190,
+        height: 50,
+        background: "#623CE9",
+        borderRadius: 4,
+        color: "white",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+        fontSize: "15px",
+        fontWeight: 500,
+        letterSpacing: "0.5px",
+        marginRight: 30
+    },
+    avatar: {
+        borderRadius: "50%",
+        width: 55,
+        height: 55,
+        background: "#623CE9",
+        marginRight: 30
+    },
+    mobileNav: {
+        display: 'none',
+        height: "100%",
+        width: '100%',
+        [theme.breakpoints.down('sm')]: {
+            display: 'flex',
+        }
+    },
+    deskNav: {
+        display: 'flex',
+        flexDirection: "row",
+        height: "100%",
+        alignItems: "center",
+        [theme.breakpoints.down('sm')]: {
+            display: 'none'
+        }
+    }
+
 
 
 });
 
 class PrimarySearchAppBar extends React.Component {
-  state = {
-    anchorEl: null,
-    mobileMoreAnchorEl: null,
-    open: false,
-    drawerOpen: false,
-    search: ""
-  };
+    state = {
+        anchorEl: null,
+        mobileMoreAnchorEl: null,
+        open: false,
+        drawerOpen: false,
+        search: ""
+    };
 
 
-  handleProfileMenuOpen = event => {
-    this.setState({ anchorEl: event.currentTarget });
-  };
+    handleProfileMenuOpen = event => {
+        this.setState({ anchorEl: event.currentTarget });
+    };
 
-  handleMenuClose = () => {
-    this.setState({ anchorEl: null });
-    this.handleMobileMenuClose();
-  };
-
-
-  handleOpen = () => {
-    this.setState({ open: true });
-    this.handleMobileMenuClose();
-  };
-
-  handleClose = () => {
-    this.setState({ open: false });
-  };
-
-  handleMobileMenuOpen = event => {
-    this.setState({ mobileMoreAnchorEl: event.currentTarget });
-  };
-
-  handleMobileMenuClose = () => {
-    this.setState({ mobileMoreAnchorEl: null });
-  };
-
-  navigate = (to) => (e) => {
-    this.handleClose();
-    this.handleMenuClose();
-    this.props.history.push(`/app/${to}`)
-  }
-
-  onSearch = (e) => {
-      e.preventDefault();
+    handleMenuClose = () => {
+        this.setState({ anchorEl: null });
+        this.handleMobileMenuClose();
+    };
 
 
-      this.props.history.push('/app/search?q='+this.state.search)
-  }
+    handleOpen = () => {
+        this.setState({ open: true });
+        this.handleMobileMenuClose();
+    };
 
-  onChange = (e) => {
-      this.setState({
-          search: e.target.value
-      })
-  }
+    handleClose = () => {
+        this.setState({ open: false });
+    };
 
-  logout = () => (e) => {
-    this.handleMenuClose();
-    auth.signout(() => {
-      this.props.history.push('/');
-    })
-  }
+    handleMobileMenuOpen = event => {
+        this.setState({ mobileMoreAnchorEl: event.currentTarget });
+    };
 
-  render() {
-    const { anchorEl, mobileMoreAnchorEl } = this.state;
-    const { classes, toggleDrawer } = this.props;
-    const isMenuOpen = Boolean(anchorEl);
-    const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+    handleMobileMenuClose = () => {
+        this.setState({ mobileMoreAnchorEl: null });
+    };
 
-    const renderMenu = (
-      <Menu
-        anchorEl={anchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.navigate("profile")}>Profile</MenuItem>
-        <MenuItem onClick={this.navigate("Settings")}>Settings</MenuItem>
-        <MenuItem onClick={this.logout()}>Logout</MenuItem>
-      </Menu>
-    );
+    navigate = (to) => (e) => {
+        this.handleClose();
+        this.handleMenuClose();
+        this.props.history.push(`/app/${to}`)
+    }
+
+    onSearch = (e) => {
+        e.preventDefault();
 
 
-    const renderMobileMenu = (
-      <Menu
-        anchorEl={mobileMoreAnchorEl}
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-        transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-        open={isMobileMenuOpen}
-        onClose={this.handleMenuClose}
-      >
-        <MenuItem onClick={this.handleOpen}>
-          <IconButton color="inherit" >
-              <AddBox />
-          </IconButton>
-        </MenuItem>
-        <MenuItem onClick={this.handleProfileMenuOpen}>
-          <IconButton color="inherit">
-            <AccountCircle />
-          </IconButton>
-        </MenuItem>
-      </Menu>
-    );
+        this.props.history.push('/app/search?q=' + this.state.search)
+    }
+
+    onChange = (e) => {
+        this.setState({
+            search: e.target.value
+        })
+    }
+
+    logout = () => (e) => {
+        this.handleMenuClose();
+        auth.signout(() => {
+            this.props.history.push('/');
+        })
+    }
+
+    render() {
+        const { anchorEl, mobileMoreAnchorEl } = this.state;
+        const { classes, toggleDrawer } = this.props;
+        const isMenuOpen = Boolean(anchorEl);
+        const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
+
+        const renderMenu = (
+            <Menu
+                anchorEl={anchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={isMenuOpen}
+                onClose={this.handleMenuClose}
+            >
+                <MenuItem onClick={this.navigate("profile")}>Profile</MenuItem>
+                <MenuItem onClick={this.navigate("Settings")}>Settings</MenuItem>
+                <MenuItem onClick={this.logout()}>Logout</MenuItem>
+            </Menu>
+        );
+
+
+        const renderMobileMenu = (
+            <Menu
+                anchorEl={mobileMoreAnchorEl}
+                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+                open={isMobileMenuOpen}
+                onClose={this.handleMenuClose}
+            >
+                <MenuItem onClick={this.handleOpen}>
+                    <IconButton color="inherit" >
+                        <AddBox />
+                    </IconButton>
+                </MenuItem>
+                <MenuItem onClick={this.handleProfileMenuOpen}>
+                    <IconButton color="inherit">
+                        <AccountCircle />
+                    </IconButton>
+                </MenuItem>
+            </Menu>
+        );
 
 
 
-    return (
-      <div className={classes.root}>
-        <AppBar position="static" className={classes.appBar}>
-          <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer" onClick={toggleDrawer}>
-              <MenuIcon />
-            </IconButton>
-            <Typography className={classes.title} variant="h6" color="inherit" noWrap onClick={this.navigate("")}>
-              Quizzer
-            </Typography>
-            <div className={classes.search}>
-              <div className={classes.searchIcon}>
-                <SearchIcon />
-              </div>
-              <form onSubmit={this.onSearch}>
-              <InputBase
-                placeholder="Search…"
-                classes={{
-                  root: classes.inputRoot,
-                  input: classes.inputInput,
-                }}
-                value={this.state.search}
-                onChange={this.onChange}
-              />
-              </form>
+        return (
+            <div className={classes.root}>
+                <div className={classes.deskNav}>
+                    <div className={classes.logo}>
+                        Quizzer
+                    </div>
+                    <div className={classes.full}>
+                        <div className={classes.search}>
+                            <SearchIcon className={classes.light} style={{ margin: 30 }} />
+                            <form style={{ width: "100%" }}>
+                                <input
+                                    placeholder="Search by keyword or tags..."
+                                    className={classes.searchInput}
+                                    value={this.state.search}
+                                    onChange={this.onChange}
+                                />
+                            </form>
+                        </div>
+                        <div className={classes.fullInner}>
+                            <div className={classes.create}>
+                                Create Activity
+                            </div>
+                            <div className={classes.avatar}>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div className={classes.mobileNav}>
+                    <div className={classes.logo}>
+                        Quizzer
+                    </div>
+                </div>
+
             </div>
-            <div className={classes.grow} />
-            <div className={classes.sectionDesktop}>
-              <IconButton
-                color="inherit"
-                onClick={this.handleOpen}
-              >
-                  <AddBox />
-              </IconButton>
-              <IconButton
-              aria-owns={isMenuOpen ? 'material-appbar' : undefined}
-              aria-haspopup="true"
-              onClick={this.handleProfileMenuOpen}
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
-            </div>
-            <div className={classes.sectionMobile}>
-              <IconButton aria-haspopup="true" onClick={this.handleMobileMenuOpen} color="inherit">
-                <MoreIcon />
-              </IconButton>
-            </div>
-          </Toolbar>
-        </AppBar>
-
-        <Dialog
-          open={this.state.open}
-          fullWidth={true}
-          maxWidth={"md"}
-          onClose={this.handleClose}
-          aria-labelledby="form-dialog-title"
-        >
-          <DialogTitle id="form-dialog-title">New Activity</DialogTitle>
-          <DialogContent>
-
-          <Grid container spacing={0}>
-
-            <Grid item xs={6} className={classes.option}>
-              <Paper className={classes.paper+" "+classes.quiz} elevation={5}>
-                <Typography variant="h4" style={{marginBottom: 10}}>
-                  Quiz
-                </Typography>
-                <Typography variant="h5" className={classes.description} gutterBottom >
-                  A multiple choice, dynamic quiz, ideal for practicing the real thing
-                </Typography>
-
-                <Button variant="contained" color="secondary" className={classes.choose} onClick={this.navigate("edit?type=q")}>Choose</Button>
-
-              </Paper>
-
-            </Grid>
-            <Grid item xs={6} className={classes.option}>
-              <Paper className={classes.paper+" "+classes.flash} elevation={5}>
-
-                <Typography variant="h4" style={{marginBottom: 10}}>
-                  Flashcards
-                </Typography>
-
-                <Typography variant="h5" gutterBottom className={classes.description}>
-                  Two-sided key-definition cards, perfect for vocabulary, etc...
-                </Typography>
-
-                <Button variant="contained" color="secondary" className={classes.choose} onClick={this.navigate("edit?type=f")}>Choose</Button>
-
-              </Paper>
-            </Grid>
-
-          </Grid>
-
-
-          </DialogContent>
-        </Dialog>
-        {renderMenu}
-        {renderMobileMenu}
 
 
 
-
-      </div>
-    );
-  }
+        );
+    }
 }
 
 PrimarySearchAppBar.propTypes = {
-  classes: PropTypes.object.isRequired,
+    classes: PropTypes.object.isRequired,
 };
 
 export default withRouter(withStyles(styles)(PrimarySearchAppBar));
