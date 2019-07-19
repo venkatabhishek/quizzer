@@ -226,10 +226,10 @@ class Test extends Component {
                         </div>
 
                         <div className={classes.navigation}>
-                            <Button variant="contained" color="secondary" className={classes.navBtn} onClick={this.move(1)}>
+                            <Button variant="contained" color="primary" className={classes.navBtn} onClick={this.move(1)}>
                                 {current + 1 == quiz.length ? (<span>Submit</span>) : (<span>Next</span>)}
                             </Button>
-                            <Button variant="contained" color="secondary" className={classes.navBtn} onClick={this.move(-1)}>
+                            <Button variant="contained" color="primary" className={classes.navBtn} onClick={this.move(-1)}>
                                 Back
                         </Button>
                         </div>

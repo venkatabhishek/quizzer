@@ -186,16 +186,16 @@ class Quiz extends Component {
                             checked={showAnswer}
                             onChange={this.changeShow}
                             value="checkedA"
-                            inputProps={{ 'aria-label': 'secondary checkbox' }}
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
 
                         />
                     </Tooltip>
 
-                    <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.edit}>
+                    <Button variant="contained" color="primary" className={classes.editBtn} onClick={this.edit}>
                         Edit
                     </Button>
 
-                    <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.open}>
+                    <Button variant="contained" color="primary" className={classes.editBtn} onClick={this.open}>
                         Test Me!
                     </Button>
                     </div>

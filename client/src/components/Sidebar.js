@@ -37,7 +37,11 @@ const styles = theme => ({
         alignItems: "center",
         color: "rgba(0,0,0,0.6)",
         fontWeight: 600,
-        fontSize: 18
+        fontSize: 18,
+        cursor: "pointer",
+        "&:hover": {
+            background: "#f5f5f5"
+        }
     },
     highlight: {
         background: "#F1F0FE"
@@ -45,7 +49,7 @@ const styles = theme => ({
     bar: {
         height: "100%",
         width: 10,
-        background: "#623CE9"
+        background: "#623CE9",
     }
 })
 
@@ -70,6 +74,10 @@ const links = [
 
 class Sidebar extends React.Component {
 
+    goTo = link => e => {
+        this.props.history.push("/app"+link)
+    }
+
     render() {
         const { classes, location } = this.props;
 
@@ -82,7 +90,7 @@ class Sidebar extends React.Component {
                 {links.map(({text, icon: Icon, link}, index) => {
                     var bar = location.pathname == "/app"+link ? classes.bar : ""
                     var extra = location.pathname == "/app"+link ? classes.highlight : ""
-                    return (<div className={classes.link + " " + extra} key={index} >
+                    return (<div className={classes.link + " " + extra} key={index} onClick={this.goTo(link)}>
                     <div className={bar}></div>
                         <Icon style={{margin: 40}}/> {text}
                     </div>)

@@ -26,16 +26,19 @@ const styles = theme => ({
     },
     activity: {
         width: 220,
-        minHeight: 250,
+        minHeight: 220,
         margin: 20,
         boxShadow: "0px 15px 38px rgba(0, 0, 0, 0.15)",
         borderRadius: 24,
         padding: 20,
         cursor: "pointer",
         "&:hover": {
-            outline: "2px solid #1e90ff"
+            background: "#f5f5f5"
         },
-        position: "relative"
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
     },
     button: {
         margin: 20
@@ -305,9 +308,10 @@ class Base extends Component {
 
 
                 <div className={classes.acts}>
-                    <Typography variant="h5" className={classes.helpTxt} style={{ fontWeight: "normal" }}>
+                    <div><Typography variant="h4" className={classes.helpTxt} style={{  }}>
                         Explore some Activities
                         </Typography>
+                        </div>
                     {list}
                 </div>
 

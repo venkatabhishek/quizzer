@@ -249,7 +249,7 @@ class PrimarySearchAppBar extends React.Component {
                             </form>
                         </div>
                         <div className={classes.fullInner}>
-                            <div className={classes.create}>
+                            <div className={classes.create} onClick={this.navigate("create")}>
                                 Create Activity
                             </div>
                             <div className={classes.avatar}>

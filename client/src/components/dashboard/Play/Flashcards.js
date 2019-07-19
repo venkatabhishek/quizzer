@@ -219,7 +219,7 @@ class Flashcards extends Component {
                     </Typography>
 
 
-                    <Button variant="contained" color="secondary" className={classes.editBtn} onClick={this.edit}>
+                    <Button variant="contained" color="primary" className={classes.editBtn} onClick={this.edit}>
                         Edit
                     </Button>
 
@@ -237,13 +237,13 @@ class Flashcards extends Component {
                     </div>
                     </div>
                     <div className={classes.under}>
-                        <IconButton color="secondary" className={classes.button} onClick={this.change(-1)}>
+                        <IconButton color="primary" className={classes.button} onClick={this.change(-1)}>
                             <ArrowBack/>
                         </IconButton>
                         <Typography variant="h6" gutterBottom>
                             {current} / {cards.length}
                         </Typography>
-                        <IconButton color="secondary" className={classes.button} onClick={this.change(1)}>
+                        <IconButton color="primary" className={classes.button} onClick={this.change(1)}>
                             <ArrowForward />
                         </IconButton>
                     </div>

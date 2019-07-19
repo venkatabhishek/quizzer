@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { ThemeProvider } from '@material-ui/styles';
 import { createMuiTheme } from '@material-ui/core/styles';
-import blue from '@material-ui/core/colors/blue';
 import { BrowserRouter } from 'react-router-dom';
 
 import Routes from './Routes';
 
 const theme = createMuiTheme({
 	palette: {
-		primary: blue
+		primary: {
+            main: "#623CE9"
+        }
 	},
 	typography: {
 		useNextVariants: true,

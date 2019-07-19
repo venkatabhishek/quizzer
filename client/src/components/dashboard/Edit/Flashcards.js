@@ -446,7 +446,7 @@ class Flashcards extends Component {
 
             </div>
 
-            <Fab color="secondary" aria-label="Delete" className={classes.fab} onClick={this.deleteCard(index)}>
+            <Fab color="primary" aria-label="Delete" className={classes.fab} onClick={this.deleteCard(index)}>
                     <DeleteIcon />
             </Fab>
             </div>
@@ -480,8 +480,8 @@ class Flashcards extends Component {
                     />
 
                     <div className={classes.actionButtons}>
-                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save.bind(this)}>Save</Button>
-                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.play}>Play</Button>
+                        <Button variant="contained" color="primary" className={classes.actionButton} onClick={this.save.bind(this)}>Save</Button>
+                        <Button variant="contained" color="primary" className={classes.actionButton} onClick={this.play}>Play</Button>
                     </div>
                 </div>
 
@@ -489,7 +489,7 @@ class Flashcards extends Component {
                     <Grid item sm={4}>
                         <div className={classes.side}>
                             {sides}
-                            <Button variant="contained" color="secondary" className={classes.button} onClick={this.addCard.bind(this)}>
+                            <Button variant="contained" color="primary" className={classes.button} onClick={this.addCard.bind(this)}>
                                 Add card
                         </Button>
                         </div>

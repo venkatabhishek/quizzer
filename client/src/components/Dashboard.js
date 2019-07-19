@@ -25,6 +25,7 @@ import Search from './dashboard/Search'
 import Edit from './dashboard/Edit';
 import Play from './dashboard/Play'
 import Settings from './dashboard/Settings'
+import Create from './dashboard/Create'
 import NoMatch from './NoMatch'
 
 var routes = [
@@ -32,55 +33,50 @@ var routes = [
         path: "",
         exact: true,
         component: Base,
-        icon: Home,
-        name: "Home"
+
     },
     {
-        path: "profile",
+        path: "workspace",
         exact: false,
         component: Profile,
-        icon: AccountBox,
-        name: "Profile"
+
     },
     {
         path: "edit",
         exact: false,
         component: Edit,
-        exclude: true
+
     },
     {
         path: "play",
         exact: false,
         component: Play,
-        exclude: true
+
     },
     {
         path: "search",
         exact: false,
         component: Search,
-        exclude: true
+
     },
     {
         path: "settings",
         exact: false,
         component: Settings,
-         icon: SettingsIcon,
-         name: "Settings"
+
     },
+    {
+        path: "create",
+        exact: false,
+        component: Create,
+
+    }
 
 ]
 
 const styles = theme => ({
     list: {
         width: 250,
-    },
-    nospace: {
-        marginLeft:0,
-        transition: "margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms"
-    },
-    space: {
-        marginLeft: 250,
-        transition: "margin 225ms cubic-bezier(0, 0, 0.2, 1) 0ms"
     },
     navbarItem: {
         margin: "10px 0"
@@ -89,6 +85,9 @@ const styles = theme => ({
         color: "black",
         textDecoration: "none"
     },
+    base: {
+        width: "100%"
+    }
 
 });
 
@@ -152,37 +151,12 @@ class Dashboard extends Component {
 
         const sideRoutes = routes.filter(r => !r.exclude)
 
-        const sideList = (
-            <div
-                className={classes.list}
-                role="presentation"
-                onKeyDown={this.toggleDrawer}
-            >
-                <List>
-                    {sideRoutes.map(({path, name, icon: Icon}, index) => {
-                        return ((
-                        <Link to={`/app/${path}`} className={classes.link} key={index}>
-                        <ListItem button key={index} className={classes.navbarItem}>
-                            <ListItemIcon><Icon /></ListItemIcon>
-                            <ListItemText primary={name} />
-                        </ListItem>
-                        </Link>
-                    ))
-                    })}
-                </List>
-
-            </div>
-        );
-
-        var sideSpace = drawerOpen ? classes.space : classes.nospace;
-
-
         return (
             <div className={classes.main}>
                 <Navbar navigate={this.navigate} toggleDrawer={this.toggleDrawer.bind(this)} />
                 <div style={{display: "flex"}}>
                     <Sidebar/>
-                    <div className={sideSpace}>
+                    <div className={classes.base}>
                         <Switch>
                             {routesComponent}
                             <Route component={NoMatch} />

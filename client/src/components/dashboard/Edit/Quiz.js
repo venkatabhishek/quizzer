@@ -322,7 +322,7 @@ class Quiz extends Component {
                     {index + 1}
                 </Typography>
 
-                <Fab color="secondary" aria-label="Delete" className={classes.fab} onClick={this.deleteQuestion(index)}>
+                <Fab color="primary" aria-label="Delete" className={classes.fab} onClick={this.deleteQuestion(index)}>
                     <DeleteIcon />
                 </Fab>
             </div>)
@@ -354,8 +354,8 @@ class Quiz extends Component {
                     />
 
                     <div className={classes.actionButtons}>
-                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.save}>Save</Button>
-                        <Button variant="contained" color="secondary" className={classes.actionButton} onClick={this.play}>Play</Button>
+                        <Button variant="contained" color="primary" className={classes.actionButton} onClick={this.save}>Save</Button>
+                        <Button variant="contained" color="primary" className={classes.actionButton} onClick={this.play}>Play</Button>
                     </div>
                 </div>
 
@@ -364,7 +364,7 @@ class Quiz extends Component {
                     <div className={classes.side}>
                         {side}
 
-                        <Button variant="contained" color="secondary" onClick={this.addQuestion}>
+                        <Button variant="contained" color="primary" onClick={this.addQuestion}>
                                 Add Question
                             </Button>
                     </div>
@@ -402,12 +402,13 @@ class Quiz extends Component {
                                     value={index}
                                     name="radio-button-demo"
                                     inputProps={{ 'aria-label': 'A' }}
+                                    color="primary"
                                 />
 
                                 </div>)
                             })}
 
-                            <Button variant="contained" color="secondary" onClick={this.addAnswer}>
+                            <Button variant="contained" color="primary" onClick={this.addAnswer}>
                                 Add Answer
                             </Button>
                             </div>
