@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "babel-watch index.js",
     "heroku-prebuild": "npm run clean",
-    "build": "./node_modules/.bin/babel index.js -d build && ./node_modules/.bin/babel server -d build/server && cp -r client/ build/",
+    "build": "./node_modules/.bin/babel index.js -d build && ./node_modules/.bin/babel server -d build/server && mkdir build/client && cp -r client/build build/client/build/",
     "clean": "rm -rf build",
     "start": "cd build && node index.js"
   },
