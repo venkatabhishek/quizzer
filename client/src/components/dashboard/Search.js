@@ -22,15 +22,20 @@ import DialogContent from '@material-ui/core/DialogContent'
 
 const styles = theme => ({
     activity: {
-        minWidth: 220,
-        minHeight: 150,
+        width: 220,
+        minHeight: 220,
         margin: 20,
-        padding: "20px 15px 20px 20px",
+        boxShadow: "0px 15px 38px rgba(0, 0, 0, 0.15)",
+        borderRadius: 24,
+        padding: 20,
         cursor: "pointer",
         "&:hover": {
-            outline: "2px solid #1e90ff"
+            background: "#f5f5f5"
         },
-        position: "relative"
+        position: "relative",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between"
     },
     container: {
         display: "flex",
@@ -257,7 +262,6 @@ class Base extends Component {
                         open={isOpen[index]}
                         onClose={this.handleMenuClose(index)}
                     >
-                        <MenuItem onClick={this.goToEdit(act._id, act.activityType)}>Edit</MenuItem>
                         <MenuItem onClick={this.handleDetailsOpen(index)}>Details</MenuItem>
                     </Menu>
                 </div>

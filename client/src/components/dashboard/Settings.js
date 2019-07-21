@@ -23,6 +23,9 @@ import { findUserProfile, updateUserProfile } from '../../utils/api-user';
 import { withRouter } from "react-router";
 
 const styles = theme => ({
+    root: {
+        padding: 40
+    },
     paper: {
         padding: 40,
         textAlign: 'center',
@@ -57,13 +60,21 @@ const styles = theme => ({
         display: "table"
     },
     submit: {
-        outline: "none",
-        border: "none",
-        background: "#2196f3",
-        padding: "12px 20px 12px 20px",
-        borderRadius: 500,
+        width: 190,
+        height: 50,
+        background: "#623CE9",
+        borderRadius: 200,
         color: "white",
-        margin: 25
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        cursor: "pointer",
+        fontSize: "15px",
+        fontWeight: 500,
+        letterSpacing: "0.5px",
+        marginRight: 30,
+        border: "none",
+        outline: "none"
     },
     primary: {
         fontSize: 24
@@ -148,46 +159,53 @@ class Settings extends Component {
         }
 
         return (
-            <div style={{ minWidth: 400 }}>
+            <div className={classes.root}>
 
-                <Paper className={classes.paper} elevation={4}>
 
-                    <form autoComplete="off" className={classes.form} onSubmit={this.onSubmit}>
-                        <Typography variant="h4" style={{ textAlign: "left" }}>
-                            User Information
+                <form autoComplete="off" className={classes.form} onSubmit={this.onSubmit}>
+                    <Typography variant="h4" style={{ textAlign: "left", marginBottom: 25 }}>
+                        User Information
                             </Typography>
-                        <input type="text"
-                            placeholder="Name..."
-                            value={this.state.name}
-                            onChange={this.handleChange('name')}
-                            className={classes.item + " " + classes.input} />
-                        <br />
-                        <input type="email"
-                            placeholder="Email..."
-                            value={this.state.email}
-                            onChange={this.handleChange('email')}
-                            className={classes.item + " " + classes.input} />
-                        <br />
-                        <input type="password"
-                            autoComplete="new-password"
-                            placeholder="Password..."
-                            value={this.state.password}
-                            onChange={this.handleChange('password')}
-                            className={classes.item + " " + classes.input} />
-                        <br />
-                        <button type="submit" className={classes.submit}>
-                            Update
+                    <Typography variant="h6" style={{ textAlign: "left" }}>
+                        Name
+                            </Typography>
+                    <input type="text"
+                        placeholder="Name..."
+                        value={this.state.name}
+                        onChange={this.handleChange('name')}
+                        className={classes.item + " " + classes.input} />
+                    <br />
+                    <Typography variant="h6" style={{ textAlign: "left" }}>
+                        Email
+                            </Typography>
+                    <input type="email"
+                        placeholder="Email..."
+                        value={this.state.email}
+                        onChange={this.handleChange('email')}
+                        className={classes.item + " " + classes.input} />
+                    <br />
+                    <Typography variant="h6" style={{ textAlign: "left" }}>
+                        Password
+                            </Typography>
+                    <input type="password"
+                        autoComplete="new-password"
+                        placeholder="Password..."
+                        value={this.state.password}
+                        onChange={this.handleChange('password')}
+                        className={classes.item + " " + classes.input} />
+                    <br />
+                    <button type="submit" className={classes.submit}>
+                        Update
                                     </button>
 
-                    </form>
-                    <br />
-                    {this.state.error && (
-                        <Typography variant="subtitle1" gutterBottom className={classes.item} style={{ color: "red" }}>
-                            {this.state.error}
-                        </Typography>
-                    )}
+                </form>
+                <br />
+                {this.state.error && (
+                    <Typography variant="subtitle1" gutterBottom className={classes.item} style={{ color: "red" }}>
+                        {this.state.error}
+                    </Typography>
+                )}
 
-                </Paper>
 
                 <Snackbar
                     anchorOrigin={{

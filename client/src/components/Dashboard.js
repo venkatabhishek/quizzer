@@ -153,7 +153,7 @@ class Dashboard extends Component {
 
         return (
             <div className={classes.main}>
-                <Navbar navigate={this.navigate} toggleDrawer={this.toggleDrawer.bind(this)} />
+                <Navbar navigate={this.navigate} user={user} toggleDrawer={this.toggleDrawer.bind(this)} />
                 <div style={{display: "flex"}}>
                     <Sidebar/>
                     <div className={classes.base}>

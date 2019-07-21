@@ -73,7 +73,7 @@ export const updateUserProfile = (req, res) => {
 
         if (req.body.name) { user.name = req.body.name; }
         if (req.body.email) { user.email = req.body.email; }
-        if (req.body.password) { user.password = req, body.password; }
+        if (req.body.password) { user.password = req.body.password; }
 
         User.findOneAndUpdate({ _id: req.auth._id }, user, function(error) {
             if (error) {

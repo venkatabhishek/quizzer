@@ -90,6 +90,10 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             width: "100%",
         }
+    },
+    flowWrap: {
+        display: "flex",
+        flexFlow: "row wrap"
     }
 })
 
@@ -102,6 +106,7 @@ class Profile extends Component {
         this.state = {
             activities: [],
             anchor: [],
+            likeAnchor: [],
             liked: [],
             likes: [],
             detailsOpen: false,
@@ -112,14 +117,28 @@ class Profile extends Component {
 
     componentWillMount = () => {
 
+        var anchor = [], likeAnchor = []
         const jwt = auth.isAuthenticated();
 
         getActivities({ t: jwt.token }).then((activities) => {
 
+            activities.forEach(a => {
+                anchor.push(null)
+            })
+
+
             getLikedActivities({ t: jwt.token }).then(liked => {
+
+                liked.forEach(l => {
+                    likeAnchor.push(null)
+                })
+
+
                 this.setState({
                     activities,
-                    liked
+                    liked,
+                    anchor, 
+                    likeAnchor
                 })
             }).catch(err => {
                 console.log(err)
@@ -140,6 +159,15 @@ class Profile extends Component {
         this.setState({ anchor });
     };
 
+    handleMenuLikeOpen = index => event => {
+        console.log(index)
+        event.stopPropagation();
+        var { likeAnchor } = this.state;
+
+        likeAnchor[index] = event.currentTarget;
+        this.setState({ likeAnchor });
+    }
+
     handleMenuClose = index => event => {
         if (event) {
             event.stopPropagation();
@@ -150,10 +178,22 @@ class Profile extends Component {
         this.setState({ anchor });
     };
 
+    handleMenuLikeClose = index => event => {
+        if (event) {
+            event.stopPropagation();
+        }
+        var { likeAnchor } = this.state;
+
+        likeAnchor[index] = null;
+        this.setState({ likeAnchor });
+    }
+
     handleOpen = (index) => (e) => {
         e.stopPropagation();
 
         this.handleMenuClose(index)(null);
+        this.handleMenuLikeClose(index)(null);
+        
     }
 
 
@@ -213,12 +253,30 @@ class Profile extends Component {
         })
     }
 
+    handleLikeDetailsOpen = (index) => (e) => {
+
+        e.stopPropagation();
+
+        var { liked } = this.state;
+
+        console.log(liked[index])
+
+        this.setState({
+            detailsOpen: true,
+            details: liked[index]
+        })
+    }
+
     render() {
         const { classes, user } = this.props;
-        const { activities, anchor, liked, detailsOpen, details } = this.state;
+        const { activities, anchor, likeAnchor, liked, detailsOpen, details } = this.state;
 
         const isOpen = anchor.map(an => {
             return Boolean(an);
+        })
+
+        const likeIsOpen = likeAnchor.map(a => {
+            return Boolean(a)
         })
 
         const list = activities.map((act, index) => {
@@ -239,7 +297,7 @@ class Profile extends Component {
                         id="simple-menu"
                         anchorEl={anchor[index]}
                         keepMounted
-                        open={isOpen[index]}
+                        open={isOpen[index] || false}
                         onClose={this.handleMenuClose(index)}
                     >
                         <MenuItem onClick={this.goToEdit(act._id, act.activityType)}>Edit</MenuItem>
@@ -279,18 +337,17 @@ class Profile extends Component {
                             {act.activityType}
                         </Typography>
                     </div>
-                    <IconButton style={{ flexShrink: "0", flexGrow: 0 }} aria-label="More options" onClick={this.handleMenuOpen(index)}>
+                    <IconButton style={{ flexShrink: "0", flexGrow: 0 }} aria-label="More options" onClick={this.handleMenuLikeOpen(index)}>
                         <MoreVert />
                     </IconButton>
                     <Menu
-                        id="simple-menu"
-                        anchorEl={anchor[index]}
+                        id="simple"
+                        anchorEl={likeAnchor[index]}
                         keepMounted
-                        open={isOpen[index]}
-                        onClose={this.handleMenuClose(index)}
+                        open={likeIsOpen[index] || false}
+                        onClose={this.handleMenuLikeClose(index)}
                     >
-                        <MenuItem onClick={this.goToEdit(act._id, act.activityType)}>Edit</MenuItem>
-                        <MenuItem onClick={this.handleDetailsOpen(index)}>Details</MenuItem>
+                        <MenuItem onClick={this.handleLikeDetailsOpen(index)}>Details</MenuItem>
                     </Menu>
                 </div>
                 <div className={classes.bottom}>
@@ -324,12 +381,16 @@ class Profile extends Component {
                         Your Activities
                         </Typography>
                         </div>
+                        <div className={classes.flowWrap}>
                     {list}
+                    </div>
                     <div><Typography variant="h4" className={classes.helpTxt} style={{  }}>
                         Activities you liked
                         </Typography>
                         </div>
+                    <div className={classes.flowWrap}>
                     {likedList}
+                    </div>
                 </div>
 
 

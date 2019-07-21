@@ -21,6 +21,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
 import { Link } from 'react-router-dom'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener';
 
 import auth from '../components/auth/auth-helper';
 
@@ -38,14 +39,14 @@ const styles = theme => ({
         background: "#fff"
     },
     logo: {
-        width: 500,
+        width: 400,
         height: "100%",
         fontSize: "36px",
         fontWeight: 700,
         display: 'flex',
         justifyContent: "center",
         alignItems: "center",
-        flexShrink: 0
+        flexShrink: 0,
     },
     search: {
         display: 'flex',
@@ -99,7 +100,8 @@ const styles = theme => ({
         width: 55,
         height: 55,
         background: "#623CE9",
-        marginRight: 30
+        marginRight: 30,
+        cursor: "pointer"
     },
     mobileNav: {
         display: 'none',
@@ -107,7 +109,12 @@ const styles = theme => ({
         width: '100%',
         [theme.breakpoints.down('sm')]: {
             display: 'flex',
+            flexFlow: "row wrap"
         }
+    },
+    mobileLogo: {
+        display: 'flex',
+        justifyContent: "space-around"
     },
     deskNav: {
         display: 'flex',
@@ -139,29 +146,9 @@ class PrimarySearchAppBar extends React.Component {
 
     handleMenuClose = () => {
         this.setState({ anchorEl: null });
-        this.handleMobileMenuClose();
-    };
-
-
-    handleOpen = () => {
-        this.setState({ open: true });
-        this.handleMobileMenuClose();
-    };
-
-    handleClose = () => {
-        this.setState({ open: false });
-    };
-
-    handleMobileMenuOpen = event => {
-        this.setState({ mobileMoreAnchorEl: event.currentTarget });
-    };
-
-    handleMobileMenuClose = () => {
-        this.setState({ mobileMoreAnchorEl: null });
     };
 
     navigate = (to) => (e) => {
-        this.handleClose();
         this.handleMenuClose();
         this.props.history.push(`/app/${to}`)
     }
@@ -188,7 +175,7 @@ class PrimarySearchAppBar extends React.Component {
 
     render() {
         const { anchorEl, mobileMoreAnchorEl } = this.state;
-        const { classes, toggleDrawer } = this.props;
+        const { classes, toggleDrawer, user } = this.props;
         const isMenuOpen = Boolean(anchorEl);
         const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
 
@@ -200,69 +187,54 @@ class PrimarySearchAppBar extends React.Component {
                 open={isMenuOpen}
                 onClose={this.handleMenuClose}
             >
-                <MenuItem onClick={this.navigate("profile")}>Profile</MenuItem>
-                <MenuItem onClick={this.navigate("Settings")}>Settings</MenuItem>
+                <MenuItem onClick={this.navigate("workspace")}>Profile</MenuItem>
+                <MenuItem onClick={this.navigate("settings")}>Settings</MenuItem>
                 <MenuItem onClick={this.logout()}>Logout</MenuItem>
             </Menu>
         );
 
-
-        const renderMobileMenu = (
-            <Menu
-                anchorEl={mobileMoreAnchorEl}
-                anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
-                transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                open={isMobileMenuOpen}
-                onClose={this.handleMenuClose}
-            >
-                <MenuItem onClick={this.handleOpen}>
-                    <IconButton color="inherit" >
-                        <AddBox />
-                    </IconButton>
-                </MenuItem>
-                <MenuItem onClick={this.handleProfileMenuOpen}>
-                    <IconButton color="inherit">
-                        <AccountCircle />
-                    </IconButton>
-                </MenuItem>
-            </Menu>
-        );
 
 
 
         return (
             <div className={classes.root}>
                 <div className={classes.deskNav}>
-                    <div className={classes.logo}>
-                        Quizzer
+                    <div className={classes.logo} >
+                        <span onClick={this.navigate("")} style={{cursor: "pointer"}}>Quizzer</span>
                     </div>
                     <div className={classes.full}>
                         <div className={classes.search}>
                             <SearchIcon className={classes.light} style={{ margin: 40 }} />
-                            <form style={{ width: "100%" }}>
+                            <form style={{ width: "100%" }} onSubmit={this.onSearch}>
                                 <input
                                     placeholder="Search by keyword or tags..."
                                     className={classes.searchInput}
                                     value={this.state.search}
                                     onChange={this.onChange}
-                                />
+                                />  
                             </form>
                         </div>
                         <div className={classes.fullInner}>
                             <div className={classes.create} onClick={this.navigate("create")}>
                                 Create Activity
                             </div>
-                            <div className={classes.avatar}>
+                            <div className={classes.avatar} style={{backgroundImage: `url(https://api.adorable.io/avatars/285/${user.email})`, backgroundSize: "contain"}} onClick={this.handleProfileMenuOpen}>
                             </div>
+                            {renderMenu}
                         </div>
                     </div>
 
                 </div>
                 <div className={classes.mobileNav}>
-                    <div className={classes.logo}>
-                        Quizzer
+                    <div className={classes.logo + " " + classes.mobileLogo}>
+                        <span onClick={this.navigate("")} style={{cursor: "pointer"}}>Q</span>
+                        <div className={classes.avatar} style={{backgroundImage: `url(https://api.adorable.io/avatars/285/${user.email})`, backgroundSize: "contain"}} onClick={this.handleProfileMenuOpen}>
+                            </div>
                     </div>
+                    
+                            {renderMenu}
                 </div>
+
 
             </div>
 

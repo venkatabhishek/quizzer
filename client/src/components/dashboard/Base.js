@@ -91,6 +91,10 @@ const styles = theme => ({
         [theme.breakpoints.down('sm')]: {
             width: "100%",
         }
+    },
+    flow: {
+        display: "flex", 
+        flexFlow: "row wrap"
     }
 })
 
@@ -270,7 +274,7 @@ class Base extends Component {
                         id="simple-menu"
                         anchorEl={anchor[index]}
                         keepMounted
-                        open={isOpen[index]}
+                        open={isOpen[index] || false}
                         onClose={this.handleMenuClose(index)}
                     >
                         <MenuItem onClick={this.goToEdit(act._id, act.activityType)}>Edit</MenuItem>
@@ -312,7 +316,9 @@ class Base extends Component {
                         Explore some Activities
                         </Typography>
                         </div>
+                    <div className={classes.flow}>
                     {list}
+                    </div>
                 </div>
 
 

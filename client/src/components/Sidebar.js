@@ -13,7 +13,8 @@ import {
 
 const styles = theme => ({
     root: {
-        width: "500px",
+        flexShrink: 0,
+        width: "400px",
         height: "calc(100vh - 110px)",
         marginTop: 10,
         background: "#fff",
@@ -37,7 +38,6 @@ const styles = theme => ({
         alignItems: "center",
         color: "rgba(0,0,0,0.6)",
         fontWeight: 600,
-        fontSize: 18,
         cursor: "pointer",
         "&:hover": {
             background: "#f5f5f5"
