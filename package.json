@@ -18,7 +18,7 @@
     "cookie-parser": "^1.4.4",
     "draft-js": "^0.10.5",
     "express": "^4.16.4",
-    "express-jwt": "^5.3.1",
+    "express-jwt": "^6.0.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.5.15",
     "query-string": "^6.5.0",
